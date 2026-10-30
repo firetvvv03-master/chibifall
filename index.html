@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chibi Color Panic - Deluxe Edition</title>
+    <title>Chibi Color Panic - Ultimate Edition</title>
     <!-- Tailwind CSS for sleek mobile UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for icons -->
@@ -40,7 +40,7 @@
     <!-- Top HUD Bar -->
     <header class="w-full max-w-md px-4 py-3 flex justify-between items-center bg-slate-900/90 backdrop-blur border-b border-slate-800 z-10">
         <div class="flex items-center space-x-2">
-            <div class="bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center space-x-1.5 shadow-inner cursor-pointer" onclick="openShop()">
+            <div class="bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center space-x-1.5 shadow-inner cursor-pointer" onclick="openShop('skins')">
                 <i class="fa-solid fa-star text-amber-400 text-xs"></i>
                 <span id="score-display" class="text-sm font-bold text-white">0</span>
             </div>
@@ -53,7 +53,7 @@
             <h1 class="text-xs font-black tracking-wider uppercase bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">Chibi Panic</h1>
         </div>
         <div class="flex items-center space-x-2">
-            <button onclick="openShop()" class="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 active:scale-95 w-9 h-9 rounded-xl flex items-center justify-center border border-amber-400 transition text-white shadow-lg shadow-amber-950/40" title="Hero Shop">
+            <button onclick="openShop('skins')" class="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 active:scale-95 w-9 h-9 rounded-xl flex items-center justify-center border border-amber-400 transition text-white shadow-lg shadow-amber-950/40" title="Hero Shop">
                 <i class="fa-solid fa-shirt text-xs"></i>
             </button>
             <button onclick="toggleMusic()" class="bg-slate-800 hover:bg-slate-700 active:scale-95 w-9 h-9 rounded-xl flex items-center justify-center border border-slate-700 transition" title="BGM Music">
@@ -76,6 +76,7 @@
                     <i class="fa-solid fa-skull text-rose-500 animate-pulse mr-1"></i>
                     <span id="boss-name">VOID CHIBI EMPRESS</span>
                     <span id="boss-stage-badge" class="bg-purple-950 border border-purple-500/50 text-purple-300 text-[9px] px-1.5 py-0.5 rounded-md ml-1">LV.1</span>
+                    <span id="boss-polarity-badge" class="bg-red-950 border border-red-500/50 text-red-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold">WEAK: NORTH</span>
                 </span>
                 <span id="boss-hp-text" class="text-[11px] font-black text-rose-400">100 / 100</span>
             </div>
@@ -130,7 +131,7 @@
             </div>
             <h2 class="text-2xl font-black text-white mb-1">CHIBI COLOR PANIC</h2>
             <p class="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
-                Match color polarity, unleash Fever Mode, and unlock magical Chibi skins!
+                Over 25+ free options per category with fully matched shop icon previews!
             </p>
 
             <div class="w-full max-w-xs space-y-2.5">
@@ -150,14 +151,20 @@
                     </div>
                     <div>
                         <div class="text-xs font-black text-rose-300">BOSS FIGHT MODE</div>
-                        <div class="text-[10px] text-rose-200/70">Charge attack energy & blast bosses!</div>
+                        <div class="text-[10px] text-rose-200/70">Charge attack energy & defeat mega bosses!</div>
                     </div>
                 </button>
 
-                <button onclick="openShop()" class="w-full bg-slate-900/80 hover:bg-slate-800 border border-amber-500/30 active:scale-95 text-amber-300 p-2.5 rounded-2xl shadow-lg transition flex items-center justify-center space-x-2 text-xs font-bold">
-                    <i class="fa-solid fa-shirt text-amber-400"></i>
-                    <span>CHIBI HERO SKIN SHOP</span>
-                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="openShop('skins')" class="bg-slate-900/80 hover:bg-slate-800 border border-amber-500/30 active:scale-95 text-amber-300 p-2.5 rounded-2xl shadow-lg transition flex items-center justify-center space-x-2 text-xs font-bold">
+                        <i class="fa-solid fa-shirt text-amber-400"></i>
+                        <span>SHOP HUB</span>
+                    </button>
+                    <button onclick="openShop('upgrades')" class="bg-slate-900/80 hover:bg-slate-800 border border-indigo-500/30 active:scale-95 text-indigo-300 p-2.5 rounded-2xl shadow-lg transition flex items-center justify-center space-x-2 text-xs font-bold">
+                        <i class="fa-solid fa-angles-up text-indigo-400"></i>
+                        <span>STAT UPGRADES</span>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -169,7 +176,7 @@
                 <div class="w-3 h-3 rounded-full bg-red-500 glow-north"></div>
                 <span class="text-xs font-semibold text-slate-300">Ruby (Red)</span>
             </div>
-            <span class="text-[11px] font-medium text-slate-500">Drag to Move • Tap to Switch</span>
+            <span class="text-[11px] font-medium text-slate-500">Tap Chibi or Drag to Switch</span>
             <div class="flex items-center space-x-2">
                 <span class="text-xs font-semibold text-slate-300">Azure (Blue)</span>
                 <div class="w-3 h-3 rounded-full bg-blue-500 glow-south"></div>
@@ -189,13 +196,13 @@
         </div>
     </footer>
 
-    <!-- Chibi Hero Skin Shop Modal -->
+    <!-- Expanded Shop Hub Modal -->
     <div id="shop-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 shadow-2xl text-center flex flex-col max-h-[90vh]">
             <div class="flex justify-between items-center mb-3">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-shirt text-amber-400"></i>
-                    <h3 class="text-base font-black text-white">Chibi Hero Shop</h3>
+                    <i class="fa-solid fa-store text-amber-400"></i>
+                    <h3 class="text-base font-black text-white">Chibi Hero Hub</h3>
                 </div>
                 <div class="bg-slate-800 px-3 py-1 rounded-xl border border-slate-700 text-xs font-bold text-amber-400 flex items-center space-x-1">
                     <i class="fa-solid fa-star text-amber-400"></i>
@@ -203,13 +210,23 @@
                 </div>
             </div>
 
-            <!-- Skin Grid Selection -->
-            <div class="grid grid-cols-2 gap-3 my-2 overflow-y-auto p-1" id="skins-container">
+            <!-- Tab Navigation Bar -->
+            <div class="grid grid-cols-6 gap-1 p-1 bg-slate-950 rounded-2xl border border-slate-800 mb-3 text-[9px]">
+                <button onclick="switchShopTab('skins')" id="tab-btn-skins" class="py-1.5 rounded-xl font-bold transition text-white bg-slate-800 border border-slate-700">SKINS</button>
+                <button onclick="switchShopTab('hats')" id="tab-btn-hats" class="py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white">HATS</button>
+                <button onclick="switchShopTab('arms')" id="tab-btn-arms" class="py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white">ARMS</button>
+                <button onclick="switchShopTab('feet')" id="tab-btn-feet" class="py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white">FEET</button>
+                <button onclick="switchShopTab('pets')" id="tab-btn-pets" class="py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white">PETS</button>
+                <button onclick="switchShopTab('upgrades')" id="tab-btn-upgrades" class="py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white">STATS</button>
+            </div>
+
+            <!-- Tab Content Container -->
+            <div class="my-1 overflow-y-auto p-1 flex-1 min-h-[260px]" id="shop-tab-content">
                 <!-- Injected dynamically via JS -->
             </div>
 
-            <button onclick="closeShop()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl transition text-xs border border-slate-700">
-                CLOSE SHOP
+            <button onclick="closeShop()" class="mt-3 w-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl transition text-xs border border-slate-700">
+                CLOSE HUB
             </button>
         </div>
     </div>
@@ -248,15 +265,20 @@
     </div>
 
     <script>
-        // --- Web Audio Synthesizer ---
+        // --- Web Audio Synthesizer & Haptics ---
         let soundEnabled = true;
         let musicEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Chiptune BGM Loop Generator
         let bgmInterval = null;
-        const bgmNotes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 293.66]; // C4, E4, G4, C5, A4, F4, G4, D4
+        const bgmNotes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 293.66];
         let bgmIndex = 0;
+
+        function triggerHaptic(pattern) {
+            if (navigator.vibrate) {
+                try { navigator.vibrate(pattern); } catch(e) {}
+            }
+        }
 
         function playBGMStep() {
             if (!musicEnabled || !soundEnabled) return;
@@ -366,6 +388,22 @@
                     gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
                     osc.start(now);
                     osc.stop(now + 0.2);
+                } else if (type === 'bomb') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.linearRampToValueAtTime(40, now + 0.3);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'laser') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.linearRampToValueAtTime(200, now + 0.4);
+                    gain.gain.setValueAtTime(0.35, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
                 } else if (type === 'damage') {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(150, now);
@@ -375,9 +413,7 @@
                     osc.start(now);
                     osc.stop(now + 0.25);
                 }
-            } catch (e) {
-                console.error(e);
-            }
+            } catch (e) {}
         }
 
         function toggleSound() {
@@ -412,47 +448,202 @@
             }, 3000);
         }
 
-        // --- Chibi Skins Data ---
+        // --- Expanded 25+ Unique Chibi Skins & Accessories ---
         const HERO_SKINS = [
-            { id: 'classic', name: 'Classic Hero', cost: 0, hairColorN: '#7f1d1d', hairColorS: '#1e3a8a', skinColor: '#fbcfe8', outfit: 'normal' },
-            { id: 'magical', name: 'Magical Girl', cost: 100, hairColorN: '#ec4899', hairColorS: '#a855f7', skinColor: '#ffe4e6', outfit: 'ribbon' },
-            { id: 'cyberpunk', name: 'Cyber Hero', cost: 250, hairColorN: '#06b6d4', hairColorS: '#10b981', skinColor: '#e0e7ff', outfit: 'visor' },
-            { id: 'angel', name: 'Angel Chibi', cost: 500, hairColorN: '#f59e0b', hairColorS: '#38bdf8', skinColor: '#fff1f2', outfit: 'angel' }
+            { id: 'classic', name: 'Ruby-Azure Chibi', hair1: '#ef4444', hair2: '#3b82f6', skin: '#ffd1dc', outfit: '#ff758c', expression: 'cheerful', faceShape: 'round' },
+            { id: 'magical', name: 'Magical Maho', hair1: '#ff2a85', hair2: '#b833ff', skin: '#ffccd5', outfit: '#ff48a4', expression: 'wink', faceShape: 'round' },
+            { id: 'cyberpunk', name: 'Cyber Neon Girl', hair1: '#00f2fe', hair2: '#4facfe', skin: '#e2f1ff', outfit: '#00c6ff', expression: 'cool', faceShape: 'sharp' },
+            { id: 'angel', name: 'Celestial Angel', hair1: '#ffb347', hair2: '#ffcc33', skin: '#fff5f5', outfit: '#ffea79', expression: 'serene', faceShape: 'soft' },
+            { id: 'demon', name: 'Sakura Succubus', hair1: '#ff0844', hair2: '#ffb199', skin: '#ffe5ec', outfit: '#ff3366', expression: 'smirk', faceShape: 'sharp' },
+            { id: 'emerald', name: 'Forest Pixie', hair1: '#00b09b', hair2: '#96c93d', skin: '#e8f8f5', outfit: '#1dd1a1', expression: 'cheerful', faceShape: 'soft' },
+            { id: 'golden', name: 'Sunset Idol', hair1: '#f12711', hair2: '#f5af19', skin: '#fff3e0', outfit: '#ff9f43', expression: 'starry', faceShape: 'round' },
+            { id: 'galaxy', name: 'Starlight Magical', hair1: '#8a2be2', hair2: '#da70d6', skin: '#f3e8ff', outfit: '#9b59b6', expression: 'dreamy', faceShape: 'round' },
+            { id: 'frost', name: 'Crystal Princess', hair1: '#4facfe', hair2: '#00f2fe', skin: '#e0f7fa', outfit: '#54a0ff', expression: 'calm', faceShape: 'soft' },
+            { id: 'ultimate', name: 'Rainbow Goddess', hair1: '#ff007f', hair2: '#7f00ff', skin: '#fff0f5', outfit: '#ff6b81', expression: 'radiant', faceShape: 'round' },
+            { id: 'crimson', name: 'Crimson Valkyrie', hair1: '#990000', hair2: '#cc0000', skin: '#ffcccc', outfit: '#cc3333', expression: 'smirk', faceShape: 'sharp' },
+            { id: 'ocean', name: 'Abyssal Siren', hair1: '#003366', hair2: '#006699', skin: '#cce6ff', outfit: '#004080', expression: 'serene', faceShape: 'soft' },
+            { id: 'solar', name: 'Solar Flare', hair1: '#ff9900', hair2: '#ffcc00', skin: '#fffae6', outfit: '#ff8000', expression: 'starry', faceShape: 'round' },
+            { id: 'toxic', name: 'Toxic Slime Girl', hair1: '#33cc33', hair2: '#66ff33', skin: '#e6ffe6', outfit: '#00b300', expression: 'cheerful', faceShape: 'round' },
+            { id: 'amethyst', name: 'Amethyst Mage', hair1: '#9933ff', hair2: '#cc66ff', skin: '#f2e6ff', outfit: '#800080', expression: 'dreamy', faceShape: 'sharp' },
+            { id: 'copper', name: 'Steampunk Tinkerer', hair1: '#b35900', hair2: '#ff8533', skin: '#ffe6cc', outfit: '#cc6600', expression: 'cool', faceShape: 'soft' },
+            { id: 'ruby_red', name: 'Ruby Shinobi', hair1: '#ff1a1a', hair2: '#b30000', skin: '#ffe6e6', outfit: '#800000', expression: 'wink', faceShape: 'sharp' },
+            { id: 'sakura', name: 'Sakura Blossom', hair1: '#ff80bf', hair2: '#ffb3d9', skin: '#ffe6f2', outfit: '#ff4d94', expression: 'cheerful', faceShape: 'round' },
+            { id: 'midnight', name: 'Midnight Shadow', hair1: '#1a1a33', hair2: '#4d4d66', skin: '#e6e6ff', outfit: '#262639', expression: 'cool', faceShape: 'sharp' },
+            { id: 'honey', name: 'Honey Bee', hair1: '#ffcc00', hair2: '#ff9900', skin: '#fff5cc', outfit: '#e6b800', expression: 'starry', faceShape: 'round' },
+            { id: 'lavender', name: 'Lavender Dream', hair1: '#cc99ff', hair2: '#e6ccff', skin: '#f9f2ff', outfit: '#b84dff', expression: 'dreamy', faceShape: 'soft' },
+            { id: 'mint', name: 'Mint Sorbet', hair1: '#66ffcc', hair2: '#99ffeb', skin: '#e6fff5', outfit: '#00cca3', expression: 'cheerful', faceShape: 'round' },
+            { id: 'peachy', name: 'Peachy Punch', hair1: '#ff9966', hair2: '#ffb380', skin: '#ffe6cc', outfit: '#ff6633', expression: 'wink', faceShape: 'round' },
+            { id: 'cobalt', name: 'Cobalt Knight', hair1: '#0047b3', hair2: '#1a75ff', skin: '#cce0ff', outfit: '#003380', expression: 'smirk', faceShape: 'sharp' },
+            { id: 'eclipse', name: 'Solar Eclipse', hair1: '#330033', hair2: '#ff6600', skin: '#f2e6f2', outfit: '#1a001a', expression: 'serene', faceShape: 'sharp' }
         ];
 
-        let unlockedSkins = JSON.parse(localStorage.getItem('chibi_unlocked_skins')) || ['classic'];
+        const HAT_ACCESSORIES = [
+            { id: 'none', name: 'No Hat', color: '#94a3b8', icon: 'fa-circle-xmark' },
+            { id: 'crown', name: 'Royal Gold Crown', color: '#f59e0b', icon: 'fa-crown' },
+            { id: 'cat_ears', name: 'Fuzzy Cat Ears', color: '#ec4899', icon: 'fa-cat' },
+            { id: 'wizard', name: 'Magical Wizard Hat', color: '#8b5cf6', icon: 'fa-hat-wizard' },
+            { id: 'bunny', name: 'Bunny Floppy Ears', color: '#ffffff', icon: 'fa-rabbit' },
+            { id: 'beret', name: 'Artist Beret', color: '#ef4444', icon: 'fa-palette' },
+            { id: 'pirate', name: 'Pirate Tricorne', color: '#334155', icon: 'fa-skull-crossbones' },
+            { id: 'cowboy', name: 'Western Cowboy Hat', color: '#b45309', icon: 'fa-hat-cowboy' },
+            { id: 'top_hat', name: 'Gentleman Top Hat', color: '#0f172a', icon: 'fa-user-tie' },
+            { id: 'halo', name: 'Divine Angel Halo', color: '#facc15', icon: 'fa-circle-dot' },
+            { id: 'horns', name: 'Demon Horns', color: '#dc2626', icon: 'fa-fire' },
+            { id: 'chef', name: 'Chef Touque', color: '#f8fafc', icon: 'fa-utensils' },
+            { id: 'party', name: 'Birthday Party Cone', color: '#38bdf8', icon: 'fa-cake-candles' },
+            { id: 'headband', name: 'Ninja Headband', color: '#1e293b', icon: 'fa-user-ninja' },
+            { id: 'straw', name: 'Summer Straw Hat', color: '#fde047', icon: 'fa-sun' },
+            { id: 'viking', name: 'Viking Horned Helm', color: '#64748b', icon: 'fa-shield-halved' },
+            { id: 'propeller', name: 'Propeller Beanie', color: '#fb7185', icon: 'fa-helicopter' },
+            { id: 'tiara', name: 'Diamond Princess Tiara', color: '#06b6d4', icon: 'fa-gem' },
+            { id: 'samurai', name: 'Samurai Kabuto Helm', color: '#475569', icon: 'fa-khanda' },
+            { id: 'astronaut', name: 'Astronaut Bubble Helmet', color: '#94a3b8', icon: 'fa-space-shuttle' },
+            { id: 'pumpkin', name: 'Spooky Pumpkin Head', color: '#ea580c', icon: 'fa-ghost' },
+            { id: 'flower', name: 'Sunflower Garland', color: '#eab308', icon: 'fa-seedling' },
+            { id: 'headphones', name: 'DJ Cyber Headphones', color: '#a855f7', icon: 'fa-headphones' },
+            { id: 'goggles', name: 'Steampunk Goggles', color: '#d97706', icon: 'fa-glasses' },
+            { id: 'winter_cap', name: 'Fluffy Winter Ushanka', color: '#38bdf8', icon: 'fa-snowflake' },
+            { id: 'fox_ears', name: 'Cunning Fox Ears', color: '#f97316', icon: 'fa-paw' }
+        ];
+
+        const ARM_ACCESSORIES = [
+            { id: 'none', name: 'Bare Arms', color: '#94a3b8', icon: 'fa-circle-xmark' },
+            { id: 'bracelets', name: 'Neon Glow Bands', color: '#06b6d4', icon: 'fa-ring' },
+            { id: 'gloves', name: 'Magical Mage Gloves', color: '#ec4899', icon: 'fa-mitten' },
+            { id: 'gauntlets', name: 'Armored Bracers', color: '#64748b', icon: 'fa-shield' },
+            { id: 'sleeves', name: 'Flowing Sleeve Ribbons', color: '#facc15', icon: 'fa-ribbon' },
+            { id: 'bangles', name: 'Golden Pharaoh Bangles', color: '#eab308', icon: 'fa-coins' },
+            { id: 'spikes', name: 'Punk Spike Wristbands', color: '#1e293b', icon: 'fa-burst' },
+            { id: 'sweatbands', name: 'Athletic Sweatbands', color: '#ef4444', icon: 'fa-heart-pulse' },
+            { id: 'ninja_guards', name: 'Shinobi Arm Guards', color: '#334155', icon: 'fa-user-ninja' },
+            { id: 'crystal_cuffs', name: 'Crystal Mana Cuffs', color: '#38bdf8', icon: 'fa-gem' },
+            { id: 'fire_wraps', name: 'Flery Hand Wraps', color: '#f97316', icon: 'fa-fire' },
+            { id: 'ice_bracelets', name: 'Frozen Ice Bangles', color: '#7dd3fc', icon: 'fa-snowflake' },
+            { id: 'shadow_sleeves', name: 'Shadow Wrappings', color: '#581c87', icon: 'fa-moon' },
+            { id: 'golden_sleeves', name: 'Royal Silk Sleeves', color: '#f59e0b', icon: 'fa-star' },
+            { id: 'cyber_arms', name: 'Cybernetic Servos', color: '#00f2fe', icon: 'fa-microchip' },
+            { id: 'leaf_bracelets', name: 'Vine Arm Bands', color: '#10b981', icon: 'fa-leaf' },
+            { id: 'star_cuffs', name: 'Starlight Armlets', color: '#c084fc', icon: 'fa-wand-magic-sparkles' },
+            { id: 'royal_sleeves', name: 'Velvet Royal Cuffs', color: '#990000', icon: 'fa-chess-queen' },
+            { id: 'tech_gloves', name: 'Holographic Touch Gloves', color: '#22d3ee', icon: 'fa-vr-cardboard' },
+            { id: 'fluff_cuffs', name: 'Fuzzy Winter Cuffs', color: '#ffffff', icon: 'fa-socks' },
+            { id: 'leather_wraps', name: 'Brawler Leather Straps', color: '#78350f', icon: 'fa-hand-fist' },
+            { id: 'feather_cuffs', name: 'Angel Feather Wraps', color: '#fef08a', icon: 'fa-feather' },
+            { id: 'gem_bracelets', name: 'Ruby Inlaid Bracelets', color: '#e11d48', icon: 'fa-gem' },
+            { id: 'pearl_cuffs', name: 'Ocean Pearl Cuffs', color: '#bae6fd', icon: 'fa-water' },
+            { id: 'steel_guards', name: 'Steel Plated Vambraces', color: '#64748b', icon: 'fa-shield-halved' },
+            { id: 'energy_rings', name: 'Plasma Energy Rings', color: '#10b981', icon: 'fa-bolt' }
+        ];
+
+        const FEET_ACCESSORIES = [
+            { id: 'none', name: 'Standard Shoes', color: '#1e293b', icon: 'fa-shoe-prints' },
+            { id: 'rollers', name: 'Roller Skates', color: '#38bdf8', icon: 'fa-person-skating' },
+            { id: 'slippers', name: 'Fluffy Bunny Slippers', color: '#f472b6', icon: 'fa-paw' },
+            { id: 'wings', name: 'Winged Sandals', color: '#facc15', icon: 'fa-feather' },
+            { id: 'combat', name: 'Combat Boots', color: '#334155', icon: 'fa-boot' },
+            { id: 'sneakers', name: 'High-Top Sneakers', color: '#ef4444', icon: 'fa-socks' },
+            { id: 'sandals', name: 'Summer Beach Sandals', color: '#d97706', icon: 'fa-umbrella-beach' },
+            { id: 'slippers_cat', name: 'Kitty Paws Slippers', color: '#fb7185', icon: 'fa-cat' },
+            { id: 'ice_skates', name: 'Figure Ice Skates', color: '#e0f2fe', icon: 'fa-snowflake' },
+            { id: 'clogs', name: 'Wooden Dutch Clogs', color: '#a16207', icon: 'fa-shoe-prints' },
+            { id: 'slippers_bear', name: 'Grizzly Bear Slippers', color: '#92400e', icon: 'fa-dog' },
+            { id: 'magical_shoes', name: 'Enchanted Glass Slippers', color: '#a5f3fc', icon: 'fa-wand-magic-sparkles' },
+            { id: 'ninja_tabi', name: 'Shinobi Ninja Tabi', color: '#0f172a', icon: 'fa-user-ninja' },
+            { id: 'hover_boots', name: 'Anti-Gravity Hover Boots', color: '#00f2fe', icon: 'fa-rocket' },
+            { id: 'flame_kicks', name: 'Blazing Flame Sneakers', color: '#ea580c', icon: 'fa-fire' },
+            { id: 'royal_shoes', name: 'Velvet Buckled Shoes', color: '#7f1d1d', icon: 'fa-crown' },
+            { id: 'cyber_greaves', name: 'Cybernetic Greaves', color: '#0284c7', icon: 'fa-microchip' },
+            { id: 'puffy_boots', name: 'Winter Snow Boots', color: '#f8fafc', icon: 'fa-snowman' },
+            { id: 'geta', name: 'Traditional Wooden Geta', color: '#78350f', icon: 'fa-torii-gate' },
+            { id: 'gold_shoes', name: 'Gilded Royal Shoes', color: '#f59e0b', icon: 'fa-coins' },
+            { id: 'pixel_boots', name: 'Retro 8-Bit Shoes', color: '#22c55e', icon: 'fa-gamepad' },
+            { id: 'sparkle_shoes', name: 'Starlight Glitter Shoes', color: '#e879f9', icon: 'fa-star' },
+            { id: 'slime_boots', name: 'Slime Bound Boots', color: '#4ade80', icon: 'fa-cubes' },
+            { id: 'heavy_boots', name: 'Titanium Plated Boots', color: '#475569', icon: 'fa-shield-halved' },
+            { id: 'clown_shoes', name: 'Jester Circus Shoes', color: '#ec4899', icon: 'fa-masks-theater' },
+            { id: 'sprint_cleats', name: 'Aero Racing Cleats', color: '#3b82f6', icon: 'fa-bolt' }
+        ];
+
+        const TRAIL_SKINS = [
+            { id: 'none', name: 'No Trail', color: '#94a3b8', type: 'solid' },
+            { id: 'rainbow', name: 'Rainbow Sparkle', color: '#ec4899', type: 'rainbow' },
+            { id: 'cyber', name: 'Cyber Neon', color: '#06b6d4', type: 'neon' },
+            { id: 'stardust', name: 'Cosmic Stardust', color: '#f59e0b', type: 'stardust' },
+            { id: 'angelic', name: 'Angel Feathers', color: '#ffffff', type: 'feathers' },
+            { id: 'flame', name: 'Inferno Trail', color: '#ef4444', type: 'fire' },
+            { id: 'void', name: 'Void Rifts', color: '#8b5cf6', type: 'void' },
+            { id: 'emerald_trail', name: 'Leaf Whirlwind', color: '#10b981', type: 'leaves' },
+            { id: 'electric', name: 'Lightning Zap', color: '#eab308', type: 'electric' },
+            { id: 'godly', name: 'Celestial Aura', color: '#facc15', type: 'celestial' },
+            { id: 'sakura_trail', name: 'Falling Cherry Blossoms', color: '#f472b6', type: 'sakura' },
+            { id: 'bubble_trail', name: 'Underwater Bubbles', color: '#38bdf8', type: 'bubbles' },
+            { id: 'gold_trail', name: 'Golden Coin Shower', color: '#fbbf24', type: 'gold' },
+            { id: 'toxic_trail', name: 'Radioactive Fallout', color: '#22c55e', type: 'toxic' },
+            { id: 'shadow_trail', name: 'Darkness Wisps', color: '#4c1d95', type: 'shadow' },
+            { id: 'crystal_trail', name: 'Diamond Shards', color: '#67e8f9', type: 'crystal' },
+            { id: 'plasma_trail', name: 'Plasma Energy Stream', color: '#a855f7', type: 'plasma' },
+            { id: 'firefly_trail', name: 'Summer Fireflies', color: '#fde047', type: 'fireflies' },
+            { id: 'snow_trail', name: 'Blizzard Snowflakes', color: '#e0f2fe', type: 'snow' },
+            { id: 'laser_trail', name: 'Laser Beam Grid', color: '#ff007f', type: 'laser' },
+            { id: 'galaxy_trail', name: 'Supernova Swirl', color: '#c084fc', type: 'galaxy' },
+            { id: 'magma_trail', name: 'Molten Magma Drips', color: '#ea580c', type: 'magma' },
+            { id: 'feather_trail', name: 'Dove Feather Drift', color: '#fef08a', type: 'feathers' },
+            { id: 'music_trail', name: 'Floating Music Notes', color: '#f43f5e', type: 'music' },
+            { id: 'matrix_trail', name: 'Matrix Code Rain', color: '#10b981', type: 'matrix' },
+            { id: 'comet_trail', name: 'Comet Tail Blast', color: '#f97316', type: 'comet' }
+        ];
+
+        const PETS = [
+            { id: 'none', name: 'No Pet', desc: 'No companion equipped', icon: 'fa-circle-xmark', perk: 'None' },
+            { id: 'fairy', name: 'Star Fairy', desc: 'Passively magnetizes falling stars & items', icon: 'fa-wand-magic-sparkles', perk: '+15% Magnet Radius' },
+            { id: 'dragon', name: 'Baby Dragon', desc: 'Shoots auxiliary fireballs at random falling blocks', icon: 'fa-dragon', perk: 'Auto-destroys occasional blocks' },
+            { id: 'cat', name: 'Lucky Neko', desc: 'Grants +25% bonus Star drops on match', icon: 'fa-cat', perk: '+25% Star Drops' },
+            { id: 'phoenix', name: 'Phoenix Chick', desc: 'Revives you with 1 heart once per game upon losing', icon: 'fa-dove', perk: '1x Free Revive' },
+            { id: 'owl', name: 'Wise Owl', desc: 'Grants +10% bonus Score multiplier', icon: 'fa-crow', perk: '+10% Score Multiplier' },
+            { id: 'ghost', name: 'Spooky Wisp', desc: 'Grants brief invulnerability on hit', icon: 'fa-ghost', perk: 'Brief Shield on Hit' },
+            { id: 'dog', name: 'Loyal Puppy', desc: 'Finds extra power-ups more frequently', icon: 'fa-dog', perk: '+20% Power-up Spawn Rate' },
+            { id: 'robot', name: 'Mecha Drone', desc: 'Zaps falling obstacles automatically', icon: 'fa-robot', perk: 'Auto-Zaps Obstacles' },
+            { id: 'bee', name: 'Buzzy Bee', desc: 'Boosts Star collection value', icon: 'fa-bee', perk: '+1 Star Value' },
+            { id: 'penguin', name: 'Ice Penguin', desc: 'Slows down falling speed slightly', icon: 'fa-penguin', perk: '-5% Fall Speed' },
+            { id: 'bunny_pet', name: 'Lucky Bunny', desc: 'Increases fever duration bonus', icon: 'fa-carrot', perk: '+15% Fever Duration' },
+            { id: 'fox', name: 'Kitsune Spirit', desc: 'Gives bonus combo protection', icon: 'fa-fox', perk: '1x Combo Safeguard' },
+            { id: 'slime_pet', name: 'Bouncy Slime', desc: 'Absorbs missed blocks once per game', icon: 'fa-cubes', perk: 'Absorbs 1 Missed Block' },
+            { id: 'bat', name: 'Vampire Bat', desc: 'Steals health from boss hits', icon: 'fa-bat', perk: 'Boss Life Drain' },
+            { id: 'turtle', name: 'Shield Turtle', desc: 'Reduces laser damage taken', icon: 'fa-shield-cat', perk: 'Laser Damage Reduction' },
+            { id: 'unicorn', name: 'Mini Unicorn', desc: 'Spawns extra rainbow prisms', icon: 'fa-horse-head', perk: 'Extra Prism Drops' },
+            { id: 'axolotl', name: 'Pink Axolotl', desc: 'Slowly regenerates hearts over time', icon: 'fa-water', perk: 'Heart Regeneration' },
+            { id: 'panda', name: 'Zen Panda', desc: 'Prevents screen shake disruptions', icon: 'fa-paw', perk: 'Steady Focus' },
+            { id: 'tanuki', name: 'Tanuki Statue', desc: 'Boosts final end game star payout', icon: 'fa-landmark', perk: '+50 End Game Stars' },
+            { id: 'griffin', name: 'Baby Griffin', desc: 'Increases attack projectile speed', icon: 'fa-feather-pointed', perk: '+25% Projectile Speed' },
+            { id: 'dj_cat', name: 'Disco Cat', desc: 'Plays enhanced BGM beats', icon: 'fa-compact-disc', perk: 'Enhanced Beats' },
+            { id: 'star_sprite', name: 'Nova Sprite', desc: 'Increases critical damage output', icon: 'fa-sun', perk: '+20% Critical Damage' },
+            { id: 'mochi', name: 'Mochi Bun', desc: 'Increases starting shield duration', icon: 'fa-cookie', perk: '+5s Start Shield' },
+            { id: 'elemental', name: 'Mana Elemental', desc: 'Double energy charge on match', icon: 'fa-bolt', perk: '+50% Attack Energy' },
+            { id: 'chibi_god', name: 'Chibi Guardian', desc: 'Ultimate all-around bonus perk', icon: 'fa-crown', perk: 'All Stats +10%' }
+        ];
+
+        const STAT_UPGRADES = [
+            { id: 'extraHeart', name: 'Heart Container', desc: '+1 Max Starting Heart', baseCost: 150, maxLvl: 3, icon: 'fa-heart text-rose-500' },
+            { id: 'magnetRadius', name: 'Magnet Radius', desc: '+20% Magnet Pull Distance', baseCost: 100, maxLvl: 3, icon: 'fa-magnet text-amber-400' },
+            { id: 'feverDuration', name: 'Fever Duration', desc: '+25% Longer Fever Mode', baseCost: 120, maxLvl: 3, icon: 'fa-fire text-amber-500' },
+            { id: 'attackPower', name: 'Boss Attack Power', desc: '+20% Hero Laser Damage', baseCost: 150, maxLvl: 3, icon: 'fa-bolt text-indigo-400' }
+        ];
+
         let currentEquippedSkin = localStorage.getItem('chibi_equipped_skin') || 'classic';
+        let currentEquippedHat = localStorage.getItem('chibi_equipped_hat') || 'none';
+        let currentEquippedArm = localStorage.getItem('chibi_equipped_arm') || 'none';
+        let currentEquippedFeet = localStorage.getItem('chibi_equipped_feet') || 'none';
+        let currentEquippedTrail = localStorage.getItem('chibi_equipped_trail') || 'none';
+        let currentEquippedPet = localStorage.getItem('chibi_equipped_pet') || 'none';
+
         let totalStarsCollected = parseInt(localStorage.getItem('chibi_total_stars')) || 0;
+        let statUpgradesLevel = JSON.parse(localStorage.getItem('chibi_stat_upgrades')) || { extraHeart: 0, magnetRadius: 0, feverDuration: 0, attackPower: 0 };
 
-        function openShop() {
+        let activeShopTab = 'skins';
+
+        function openShop(tab = 'skins') {
             document.getElementById('shop-stars-display').innerText = totalStarsCollected;
-            const container = document.getElementById('skins-container');
-            container.innerHTML = '';
-
-            HERO_SKINS.forEach(skin => {
-                const isUnlocked = unlockedSkins.includes(skin.id);
-                const isEquipped = currentEquippedSkin === skin.id;
-
-                let btnHtml = '';
-                if (isEquipped) {
-                    btnHtml = `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`;
-                } else if (isUnlocked) {
-                    btnHtml = `<button onclick="equipSkin('${skin.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
-                } else {
-                    btnHtml = `<button onclick="buySkin('${skin.id}')" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-2.5 py-1 rounded-md shadow transition flex items-center space-x-1"><i class="fa-solid fa-star text-[9px]"></i><span>${skin.cost}</span></button>`;
-                }
-
-                container.innerHTML += `
-                    <div class="bg-slate-800/80 border border-slate-700 p-2.5 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background: ${skin.hairColorN}20; border: 1px solid ${skin.hairColorN}">
-                            🌸
-                        </div>
-                        <div class="text-xs font-black text-white">${skin.name}</div>
-                        ${btnHtml}
-                    </div>
-                `;
-            });
-
+            switchShopTab(tab);
             document.getElementById('shop-modal').classList.remove('hidden');
         }
 
@@ -460,26 +651,300 @@
             document.getElementById('shop-modal').classList.add('hidden');
         }
 
-        function buySkin(skinId) {
-            const skin = HERO_SKINS.find(s => s.id === skinId);
-            if (totalStarsCollected >= skin.cost) {
-                totalStarsCollected -= skin.cost;
-                localStorage.setItem('chibi_total_stars', totalStarsCollected);
-                unlockedSkins.push(skinId);
-                localStorage.setItem('chibi_unlocked_skins', JSON.stringify(unlockedSkins));
-                equipSkin(skinId);
-                openShop();
-                showToast(`Unlocked ${skin.name}!`);
-            } else {
-                showToast("Not enough Stars!");
+        function switchShopTab(tab) {
+            activeShopTab = tab;
+            const tabs = ['skins', 'hats', 'arms', 'feet', 'pets', 'upgrades'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tab) {
+                    btn.className = "py-1.5 rounded-xl font-bold transition text-white bg-slate-800 border border-slate-700 shadow";
+                } else {
+                    btn.className = "py-1.5 rounded-xl font-bold transition text-slate-400 hover:text-white";
+                }
+            });
+
+            const content = document.getElementById('shop-tab-content');
+            if (tab === 'skins') renderSkinsTab(content);
+            else if (tab === 'hats') renderHatsTab(content);
+            else if (tab === 'arms') renderArmsTab(content);
+            else if (tab === 'feet') renderFeetTab(content);
+            else if (tab === 'pets') renderPetsTab(content);
+            else renderUpgradesTab(content);
+            
+            if (tab === 'skins') {
+                setTimeout(drawSkinPreviews, 50);
             }
+        }
+
+        function drawSkinPreviews() {
+            HERO_SKINS.forEach(skin => {
+                const canvasEl = document.getElementById(`preview-canvas-${skin.id}`);
+                if (!canvasEl) return;
+                const pCtx = canvasEl.getContext('2d');
+                pCtx.clearRect(0, 0, 60, 60);
+
+                const cx = 30;
+                const cy = 34;
+
+                pCtx.fillStyle = skin.outfit;
+                pCtx.beginPath(); pCtx.roundRect(cx - 12, cy + 6, 24, 20, [8, 8, 3, 3]); pCtx.fill();
+
+                pCtx.fillStyle = '#1e293b';
+                pCtx.beginPath(); pCtx.arc(cx - 7, cy + 28, 4.5, 0, Math.PI * 2); pCtx.arc(cx + 7, cy + 28, 4.5, 0, Math.PI * 2); pCtx.fill();
+
+                pCtx.fillStyle = skin.skin;
+                pCtx.beginPath(); pCtx.arc(cx - 15, cy + 14, 3.5, 0, Math.PI * 2); pCtx.arc(cx + 15, cy + 14, 3.5, 0, Math.PI * 2); pCtx.fill();
+
+                pCtx.fillStyle = skin.skin;
+                pCtx.beginPath();
+                if (skin.faceShape === 'sharp') {
+                    pCtx.ellipse(cx, cy - 4, 18, 20, 0, 0, Math.PI * 2);
+                } else if (skin.faceShape === 'soft') {
+                    pCtx.roundRect(cx - 18, cy - 22, 36, 38, 16);
+                } else {
+                    pCtx.arc(cx, cy - 4, 18, 0, Math.PI * 2);
+                }
+                pCtx.fill();
+
+                pCtx.fillStyle = skin.hair1;
+                pCtx.beginPath();
+                if (skin.id === 'cyberpunk') {
+                    pCtx.arc(cx, cy - 8, 19, Math.PI, Math.PI * 2);
+                    pCtx.rect(cx + 8, cy - 25, 6, 18);
+                } else if (skin.id === 'demon') {
+                    pCtx.arc(cx, cy - 8, 18, Math.PI * 1.05, Math.PI * 1.95);
+                    pCtx.fill();
+                    pCtx.fillStyle = '#1e293b';
+                    pCtx.beginPath();
+                    pCtx.moveTo(cx - 10, cy - 18); pCtx.lineTo(cx - 16, cy - 28); pCtx.lineTo(cx - 6, cy - 22);
+                    pCtx.moveTo(cx + 10, cy - 18); pCtx.lineTo(cx + 16, cy - 28); pCtx.lineTo(cx + 6, cy - 22);
+                } else {
+                    pCtx.arc(cx, cy - 8, 18, Math.PI * 1.1, Math.PI * 1.9);
+                    pCtx.rect(cx - 18, cy - 6, 4, 18);
+                    pCtx.rect(cx + 14, cy - 6, 4, 18);
+                }
+                pCtx.fill();
+
+                pCtx.fillStyle = '#0f172a';
+                if (skin.expression === 'wink') {
+                    pCtx.beginPath(); pCtx.arc(cx - 6, cy - 5, 3, 0, Math.PI * 2); pCtx.fill();
+                    pCtx.strokeStyle = '#0f172a'; pCtx.lineWidth = 1.5;
+                    pCtx.beginPath(); pCtx.arc(cx + 6, cy - 5, 3, Math.PI, 0); pCtx.stroke();
+                } else {
+                    pCtx.beginPath(); pCtx.arc(cx - 6, cy - 5, 3, 0, Math.PI * 2); pCtx.arc(cx + 6, cy - 5, 3, 0, Math.PI * 2); pCtx.fill();
+                }
+
+                pCtx.fillStyle = 'rgba(255, 105, 180, 0.5)';
+                pCtx.beginPath(); pCtx.arc(cx - 10, cy, 3, 0, Math.PI * 2); pCtx.arc(cx + 10, cy, 3, 0, Math.PI * 2); pCtx.fill();
+            });
+        }
+
+        function renderSkinsTab(container) {
+            container.innerHTML = `<div class="grid grid-cols-2 gap-2.5 p-1"></div>`;
+            const grid = container.querySelector('div');
+
+            HERO_SKINS.forEach(skin => {
+                const isEquipped = currentEquippedSkin === skin.id;
+                let btnHtml = isEquipped 
+                    ? `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`
+                    : `<button onclick="equipSkin('${skin.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
+
+                grid.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-2.5 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-950/80 border border-slate-700 flex items-center justify-center shadow-inner overflow-hidden relative">
+                            <canvas id="preview-canvas-${skin.id}" width="60" height="60" class="w-12 h-12"></canvas>
+                        </div>
+                        <div class="text-[11px] font-black text-white leading-tight">${skin.name}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function renderHatsTab(container) {
+            container.innerHTML = `<div class="grid grid-cols-2 gap-2.5 p-1"></div>`;
+            const grid = container.querySelector('div');
+
+            HAT_ACCESSORIES.forEach(hat => {
+                const isEquipped = currentEquippedHat === hat.id;
+                let btnHtml = isEquipped 
+                    ? `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`
+                    : `<button onclick="equipHat('${hat.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
+
+                grid.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-2.5 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-inner" style="background: ${hat.color}25; border: 1px solid ${hat.color}">
+                            <i class="fa-solid ${hat.icon || 'fa-hat-wizard'}" style="color: ${hat.color}"></i>
+                        </div>
+                        <div class="text-[11px] font-black text-white leading-tight">${hat.name}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function renderArmsTab(container) {
+            container.innerHTML = `<div class="grid grid-cols-2 gap-2.5 p-1"></div>`;
+            const grid = container.querySelector('div');
+
+            ARM_ACCESSORIES.forEach(arm => {
+                const isEquipped = currentEquippedArm === arm.id;
+                let btnHtml = isEquipped 
+                    ? `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`
+                    : `<button onclick="equipArm('${arm.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
+
+                grid.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-2.5 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-inner" style="background: ${arm.color}25; border: 1px solid ${arm.color}">
+                            <i class="fa-solid ${arm.icon || 'fa-hand-sparkles'}" style="color: ${arm.color}"></i>
+                        </div>
+                        <div class="text-[11px] font-black text-white leading-tight">${arm.name}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function renderFeetTab(container) {
+            container.innerHTML = `<div class="grid grid-cols-2 gap-2.5 p-1"></div>`;
+            const grid = container.querySelector('div');
+
+            FEET_ACCESSORIES.forEach(feet => {
+                const isEquipped = currentEquippedFeet === feet.id;
+                let btnHtml = isEquipped 
+                    ? `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`
+                    : `<button onclick="equipFeet('${feet.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
+
+                grid.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-2.5 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-inner" style="background: ${feet.color}25; border: 1px solid ${feet.color}">
+                            <i class="fa-solid ${feet.icon || 'fa-shoe-prints'}" style="color: ${feet.color}"></i>
+                        </div>
+                        <div class="text-[11px] font-black text-white leading-tight">${feet.name}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function renderPetsTab(container) {
+            container.innerHTML = `<div class="space-y-2.5 p-1"></div>`;
+            const list = container.querySelector('div');
+
+            PETS.forEach(pet => {
+                const isEquipped = currentEquippedPet === pet.id;
+                let btnHtml = isEquipped 
+                    ? `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`
+                    : `<button onclick="equipPet('${pet.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
+
+                list.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-3 rounded-2xl flex items-center justify-between text-left">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-amber-400 text-lg shadow-inner shrink-0">
+                                <i class="fa-solid ${pet.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-white flex items-center space-x-1.5">
+                                    <span>${pet.name}</span>
+                                </div>
+                                <div class="text-[10px] text-slate-400 leading-tight">${pet.desc}</div>
+                                <div class="text-[9px] text-amber-400 font-bold mt-0.5">Perk: ${pet.perk}</div>
+                            </div>
+                        </div>
+                        <div class="shrink-0">
+                            ${btnHtml}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderUpgradesTab(container) {
+            container.innerHTML = `<div class="space-y-2.5 p-1"></div>`;
+            const list = container.querySelector('div');
+
+            STAT_UPGRADES.forEach(upg => {
+                const curLvl = statUpgradesLevel[upg.id] || 0;
+                const isMax = curLvl >= upg.maxLvl;
+                const cost = upg.baseCost * (curLvl + 1);
+
+                let btnHtml = isMax
+                    ? `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2.5 py-1 rounded-md border border-emerald-500/40">MAXED</span>`
+                    : `<button onclick="buyUpgrade('${upg.id}')" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3 py-1.5 rounded-md shadow transition flex items-center space-x-1"><i class="fa-solid fa-star text-[9px]"></i><span>${cost}</span></button>`;
+
+                list.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-3 rounded-2xl flex items-center justify-between text-left">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-lg shadow-inner">
+                                <i class="fa-solid ${upg.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-white flex items-center space-x-1.5">
+                                    <span>${upg.name}</span>
+                                    <span class="text-[9px] text-amber-400 font-bold">LVL ${curLvl}/${upg.maxLvl}</span>
+                                </div>
+                                <div class="text-[10px] text-slate-400 leading-tight">${upg.desc}</div>
+                            </div>
+                        </div>
+                        <div>
+                            ${btnHtml}
+                        </div>
+                    </div>
+                `;
+            });
         }
 
         function equipSkin(skinId) {
             currentEquippedSkin = skinId;
             localStorage.setItem('chibi_equipped_skin', skinId);
-            openShop();
+            openShop('skins');
             showToast("Skin Equipped!");
+        }
+
+        function equipHat(hatId) {
+            currentEquippedHat = hatId;
+            localStorage.setItem('chibi_equipped_hat', hatId);
+            openShop('hats');
+            showToast("Hat Equipped!");
+        }
+
+        function equipArm(armId) {
+            currentEquippedArm = armId;
+            localStorage.setItem('chibi_equipped_arm', armId);
+            openShop('arms');
+            showToast("Arm Accessory Equipped!");
+        }
+
+        function equipFeet(feetId) {
+            currentEquippedFeet = feetId;
+            localStorage.setItem('chibi_equipped_feet', feetId);
+            openShop('feet');
+            showToast("Feet Accessory Equipped!");
+        }
+
+        function equipPet(petId) {
+            currentEquippedPet = petId;
+            localStorage.setItem('chibi_equipped_pet', petId);
+            openShop('pets');
+            showToast("Pet Companion Equipped!");
+        }
+
+        function buyUpgrade(upgradeId) {
+            const upg = STAT_UPGRADES.find(u => u.id === upgradeId);
+            const curLvl = statUpgradesLevel[upgradeId] || 0;
+            if (curLvl >= upg.maxLvl) return;
+
+            const cost = upg.baseCost * (curLvl + 1);
+            if (totalStarsCollected >= cost) {
+                totalStarsCollected -= cost;
+                statUpgradesLevel[upgradeId] = curLvl + 1;
+                localStorage.setItem('chibi_total_stars', totalStarsCollected);
+                localStorage.setItem('chibi_stat_upgrades', JSON.stringify(statUpgradesLevel));
+                openShop('upgrades');
+                showToast(`Upgraded ${upg.name}!`);
+            } else {
+                showToast("Not enough Stars!");
+            }
         }
 
         // --- Game Core Variables ---
@@ -491,6 +956,7 @@
         let gameMode = 'classic';
         let score = 0;
         let lives = 3;
+        let maxLives = 3;
         let bestScore = localStorage.getItem('chibi_best') || 0;
         let playerPolarity = 'N';
         let playerX = 200;
@@ -501,33 +967,48 @@
         let blocks = [];
         let powerUps = [];
         let particles = [];
+        let trailParticles = [];
         let projectiles = [];
         let bossProjectiles = [];
+        let floatingTexts = [];
 
         let spawnTimer = 0;
         let spawnInterval = 75;
         let gameSpeed = 2.5;
 
-        // Combo & Fever System
+        let screenShakeTime = 0;
         let comboCount = 0;
         let isFeverActive = false;
         let feverTimer = 0;
 
-        // Achievements state
         let achFirstBoss = false;
         let ach10Combo = false;
         let achFever = false;
 
-        // Boss Mode Variables
         let attackEnergy = 0;
         let boss = null;
         let bossStage = 1;
 
-        // Active Power-up States
         let activeShield = false;
         let activeMultiplier = false;
         let activeSlow = false;
+        let activeMagnet = false;
+        let activePrism = false;
         let powerUpTimer = 0;
+        let phoenixReviveUsed = false;
+        let petAngle = 0;
+
+        const BOSS_TYPES = [
+            { name: "VOID CHIBI EMPRESS", color: "#581c87", eyeColor: "#f43f5e", crownColor: "#ec4899" },
+            { name: "GIGA MECHA CHIBI", color: "#1e293b", eyeColor: "#06b6d4", crownColor: "#3b82f6" },
+            { name: "DARK CAT LORD", color: "#4c0519", eyeColor: "#f59e0b", crownColor: "#ef4444" }
+        ];
+
+        function triggerScreenShake(duration = 10) { screenShakeTime = duration; }
+
+        function addFloatingText(x, y, text, color = '#ffffff') {
+            floatingTexts.push({ x: x, y: y, text: text, color: color, life: 35, vy: -1.2 });
+        }
 
         function resizeCanvas() {
             const container = canvas.parentElement;
@@ -549,7 +1030,12 @@
             gameMode = mode;
             document.getElementById('start-overlay').classList.add('hidden');
             score = 0;
-            lives = 3;
+
+            const extraHearts = statUpgradesLevel.extraHeart || 0;
+            maxLives = 3 + extraHearts;
+            lives = maxLives;
+            phoenixReviveUsed = false;
+
             attackEnergy = 0;
             bossStage = 1;
             comboCount = 0;
@@ -559,8 +1045,10 @@
             blocks = [];
             powerUps = [];
             particles = [];
+            trailParticles = [];
             projectiles = [];
             bossProjectiles = [];
+            floatingTexts = [];
 
             spawnTimer = 0;
             gameSpeed = 2.5;
@@ -569,9 +1057,12 @@
             playerX = width / 2;
             targetX = width / 2;
             playerY = height - 110;
+
             activeShield = false;
             activeMultiplier = false;
             activeSlow = false;
+            activeMagnet = false;
+            activePrism = false;
 
             updateScoreUI();
             updateLivesUI();
@@ -595,25 +1086,47 @@
         }
 
         function spawnBoss() {
-            const hpVal = 100 + (bossStage - 1) * 50;
+            const bossType = BOSS_TYPES[(bossStage - 1) % BOSS_TYPES.length];
+            const hpVal = 100 + (bossStage - 1) * 60;
             boss = {
+                typeInfo: bossType,
                 x: width / 2,
-                y: 80,
+                y: 85,
                 hp: hpVal,
                 maxHp: hpVal,
                 dir: 1,
                 speed: 1.5 + bossStage * 0.3,
                 hitTimer: 0,
-                attackCooldown: 0
+                attackCooldown: 0,
+                polarity: Math.random() < 0.5 ? 'N' : 'S',
+                laserTimer: 0,
+                isChargingLaser: false,
+                isFiringLaser: false,
+                laserX: width / 2
             };
+            document.getElementById('boss-name').innerText = bossType.name;
             document.getElementById('boss-stage-badge').innerText = `LV.${bossStage}`;
+            updateBossPolarityUI();
             updateBossHPUI();
+        }
+
+        function updateBossPolarityUI() {
+            if (!boss) return;
+            const badge = document.getElementById('boss-polarity-badge');
+            if (boss.polarity === 'N') {
+                badge.innerText = "WEAK: NORTH (RED)";
+                badge.className = "bg-red-950 border border-red-500/50 text-red-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold";
+            } else {
+                badge.innerText = "WEAK: SOUTH (BLUE)";
+                badge.className = "bg-blue-950 border border-blue-500/50 text-blue-400 text-[9px] px-1.5 py-0.5 rounded-md font-bold";
+            }
         }
 
         function setPlayerPolarity(pol) {
             if (!gameRunning) return;
             playerPolarity = pol;
             playSound('switch');
+            triggerHaptic([25]);
             updatePolarityUI();
             
             for (let i = 0; i < 6; i++) {
@@ -640,14 +1153,8 @@
             }
         }
 
-        function updateScoreUI() {
-            document.getElementById('score-display').innerText = score;
-        }
-
-        function updateLivesUI() {
-            document.getElementById('lives-display').innerText = lives;
-        }
-
+        function updateScoreUI() { document.getElementById('score-display').innerText = score; }
+        function updateLivesUI() { document.getElementById('lives-display').innerText = `${lives}/${maxLives}`; }
         function updateEnergyUI() {
             const bar = document.getElementById('charge-bar');
             const text = document.getElementById('charge-text');
@@ -685,27 +1192,73 @@
         }
 
         function shootAttackProjectile(isSuper = false) {
-            if (isSuper) playSound('superBeam');
-            else playSound('shoot');
+            if (isSuper) {
+                playSound('superBeam');
+                triggerScreenShake(15);
+            } else {
+                playSound('shoot');
+            }
 
-            const color = playerPolarity === 'N' ? '#ef4444' : '#3b82f6';
+            const dmgBonus = 1 + (statUpgradesLevel.attackPower || 0) * 0.2;
+            const baseDmg = isSuper ? 35 : 10;
+            const finalDmg = Math.round(baseDmg * dmgBonus);
+
+            const skinDef = HERO_SKINS.find(s => s.id === currentEquippedSkin) || HERO_SKINS[0];
+            const color = playerPolarity === 'N' ? skinDef.hair1 : skinDef.hair2;
             projectiles.push({
                 x: playerX,
                 y: playerY - 30,
                 vy: isSuper ? -12 : -9,
                 radius: isSuper ? 20 : 9,
-                damage: isSuper ? 35 : 10,
+                damage: finalDmg,
+                polarity: playerPolarity,
                 color: isSuper ? '#f59e0b' : color,
                 isSuper: isSuper
             });
         }
 
-        // --- Touch & Pointer Controls ---
+        function triggerBombExplosion() {
+            playSound('bomb');
+            triggerScreenShake(12);
+
+            let destroyedCount = 0;
+            const skinDef = HERO_SKINS.find(s => s.id === currentEquippedSkin) || HERO_SKINS[0];
+            for (let i = blocks.length - 1; i >= 0; i--) {
+                let b = blocks[i];
+                if (b.polarity !== playerPolarity && !activePrism) {
+                    destroyedCount++;
+                    for (let p = 0; p < 8; p++) {
+                        particles.push({
+                            x: b.x + b.size/2,
+                            y: b.y + b.size/2,
+                            vx: (Math.random() - 0.5) * 8,
+                            vy: (Math.random() - 0.5) * 8,
+                            color: b.polarity === 'N' ? skinDef.hair1 : skinDef.hair2,
+                            life: 25
+                        });
+                    }
+                    blocks.splice(i, 1);
+                }
+            }
+            if (destroyedCount > 0) {
+                addFloatingText(width/2, height/2, `BOMB CLEARED ${destroyedCount}!`, '#f59e0b');
+            }
+        }
+
         canvas.addEventListener('pointerdown', (e) => {
             if (!gameRunning) return;
-            isDragging = true;
             const rect = canvas.getBoundingClientRect();
-            targetX = e.clientX - rect.left;
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            const distToPlayer = Math.hypot(clickX - playerX, clickY - playerY);
+            if (distToPlayer <= 45) {
+                setPlayerPolarity(playerPolarity === 'N' ? 'S' : 'N');
+                return;
+            }
+
+            isDragging = true;
+            targetX = clickX;
         });
 
         canvas.addEventListener('pointermove', (e) => {
@@ -724,17 +1277,11 @@
         });
 
         function spawnItem() {
-            if (Math.random() < 0.18 && powerUps.length === 0) {
-                const types = ['shield', 'multiplier', 'slow', 'heart'];
+            if (Math.random() < 0.22 && powerUps.length === 0) {
+                const types = ['shield', 'multiplier', 'slow', 'heart', 'magnet', 'prism', 'bomb'];
                 const pType = types[Math.floor(Math.random() * types.length)];
                 const x = Math.random() * (width - 60) + 30;
-                powerUps.push({
-                    x: x,
-                    y: -40,
-                    size: 34,
-                    type: pType,
-                    speed: 2.2
-                });
+                powerUps.push({ x: x, y: -40, size: 34, type: pType, speed: 2.2 });
                 return;
             }
 
@@ -745,14 +1292,7 @@
             const x = Math.random() * (width - size - 60) + 30;
             const currentSpeed = activeSlow ? (gameSpeed * 0.5) : gameSpeed;
 
-            blocks.push({
-                x: x,
-                y: -50,
-                size: size,
-                polarity: polarity,
-                shape: shape,
-                speed: currentSpeed + Math.random() * 0.6
-            });
+            blocks.push({ x: x, y: -50, size: size, polarity: polarity, shape: shape, speed: currentSpeed + Math.random() * 0.6 });
         }
 
         function update() {
@@ -760,6 +1300,39 @@
 
             playerX += (targetX - playerX) * 0.2;
             playerX = Math.max(35, Math.min(width - 35, playerX));
+            petAngle += 0.08;
+
+            const skinDef = HERO_SKINS.find(s => s.id === currentEquippedSkin) || HERO_SKINS[0];
+
+            if (currentEquippedPet === 'dragon' && Math.random() < 0.02 && blocks.length > 0) {
+                let targetBlock = blocks[Math.floor(Math.random() * blocks.length)];
+                projectiles.push({
+                    x: playerX,
+                    y: playerY - 20,
+                    vy: -10,
+                    radius: 8,
+                    damage: 15,
+                    polarity: targetBlock.polarity,
+                    color: '#f59e0b',
+                    isSuper: false
+                });
+            }
+
+            if (currentEquippedTrail !== 'none') {
+                const trailDef = TRAIL_SKINS.find(t => t.id === currentEquippedTrail);
+                let trailColor = trailDef.color;
+                if (trailDef.type === 'rainbow') {
+                    const hue = (Date.now() * 0.25) % 360;
+                    trailColor = `hsl(${hue}, 100%, 65%)`;
+                }
+                trailParticles.push({
+                    x: playerX + (Math.random() - 0.5) * 12,
+                    y: playerY + 15 + (Math.random() - 0.5) * 12,
+                    color: trailColor,
+                    size: Math.random() * 6 + 4,
+                    life: 20
+                });
+            }
 
             spawnTimer++;
             const curInterval = isFeverActive ? 25 : spawnInterval;
@@ -770,12 +1343,9 @@
                 if (gameSpeed < 5.2) gameSpeed += 0.04;
             }
 
-            // Fever Mode Timer
             if (isFeverActive) {
                 feverTimer--;
-                if (feverTimer <= 0) {
-                    isFeverActive = false;
-                }
+                if (feverTimer <= 0) isFeverActive = false;
             }
 
             if (powerUpTimer > 0) {
@@ -784,29 +1354,59 @@
                     activeShield = false;
                     activeMultiplier = false;
                     activeSlow = false;
+                    activeMagnet = false;
+                    activePrism = false;
                 }
             }
 
-            // Boss Logic
+            if (screenShakeTime > 0) screenShakeTime--;
+
             if (gameMode === 'boss' && boss) {
-                boss.x += boss.speed * boss.dir;
-                if (boss.x > width - 50 || boss.x < 50) boss.dir *= -1;
+                if (!boss.isFiringLaser) {
+                    boss.x += boss.speed * boss.dir;
+                    if (boss.x > width - 50 || boss.x < 50) boss.dir *= -1;
+                }
                 if (boss.hitTimer > 0) boss.hitTimer--;
 
                 boss.attackCooldown++;
                 if (boss.attackCooldown > Math.max(35, 85 - bossStage * 10)) {
                     boss.attackCooldown = 0;
-                    bossProjectiles.push({
-                        x: boss.x,
-                        y: boss.y + 25,
-                        vx: (Math.random() - 0.5) * 3,
-                        vy: 4 + bossStage * 0.5,
-                        size: 12
-                    });
+                    bossProjectiles.push({ x: boss.x, y: boss.y + 25, vx: (Math.random() - 0.5) * 3, vy: 4 + bossStage * 0.5, size: 12 });
+                }
+
+                boss.laserTimer++;
+                if (boss.laserTimer > 280) {
+                    boss.isChargingLaser = true;
+                    boss.laserX = boss.x;
+                    if (boss.laserTimer === 281) showToast("WARNING: BOSS CHARGING VOID LASER!");
+                }
+                if (boss.laserTimer > 350) {
+                    boss.isChargingLaser = false;
+                    boss.isFiringLaser = true;
+                    if (boss.laserTimer === 351) playSound('laser');
+                }
+                if (boss.laserTimer > 390) {
+                    boss.isFiringLaser = false;
+                    boss.laserTimer = 0;
+                }
+
+                if (boss.isFiringLaser && Math.abs(playerX - boss.laserX) < 40) {
+                    if (activeShield) {
+                        triggerPowerUpBanner('SHIELD BLOCKED LASER!', 'fa-shield');
+                    } else {
+                        playSound('damage');
+                        triggerHaptic([60, 40, 60]);
+                        triggerScreenShake(15);
+                        comboCount = 0;
+                        lives--;
+                        updateLivesUI();
+                        boss.laserTimer = 0;
+                        boss.isFiringLaser = false;
+                        if (lives <= 0) { checkReviveOrGameOver(); return; }
+                    }
                 }
             }
 
-            // Update Boss Projectiles
             for (let i = bossProjectiles.length - 1; i >= 0; i--) {
                 let bp = bossProjectiles[i];
                 bp.x += bp.vx;
@@ -815,13 +1415,14 @@
                 if (dist < bp.size + 20) {
                     if (activeShield) {
                         triggerPowerUpBanner('SHIELD BLOCKED ATTACK!', 'fa-shield');
-                        unlockAchievement("Flawless Shield Block", "fa-shield");
                     } else {
                         playSound('damage');
+                        triggerHaptic([60, 40, 60]);
+                        triggerScreenShake(10);
                         comboCount = 0;
                         lives--;
                         updateLivesUI();
-                        if (lives <= 0) { gameOver(); return; }
+                        if (lives <= 0) { checkReviveOrGameOver(); return; }
                     }
                     bossProjectiles.splice(i, 1);
                 } else if (bp.y > height + 40) {
@@ -829,7 +1430,6 @@
                 }
             }
 
-            // Update Hero Projectiles
             for (let i = projectiles.length - 1; i >= 0; i--) {
                 let p = projectiles[i];
                 p.y += p.vy;
@@ -838,38 +1438,41 @@
                     const dist = Math.hypot(p.x - boss.x, p.y - boss.y);
                     if (dist < p.radius + 35) {
                         playSound('bossHit');
-                        boss.hp -= p.damage;
+                        let finalDamage = p.damage;
+                        if (p.polarity === boss.polarity) {
+                            finalDamage *= 2;
+                            addFloatingText(boss.x, boss.y - 20, `CRITICAL! -${finalDamage}`, skinDef.hair1);
+                        } else {
+                            addFloatingText(boss.x, boss.y - 20, `-${finalDamage}`, '#f59e0b');
+                        }
+
+                        boss.hp -= finalDamage;
                         boss.hitTimer = 8;
                         updateBossHPUI();
 
                         for (let k = 0; k < 12; k++) {
-                            particles.push({
-                                x: p.x,
-                                y: p.y,
-                                vx: (Math.random() - 0.5) * 8,
-                                vy: (Math.random() - 0.5) * 8,
-                                color: p.color,
-                                life: 20
-                            });
+                            particles.push({ x: p.x, y: p.y, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8, color: p.color, life: 20 });
                         }
 
                         if (boss.hp <= 0) {
                             playSound('powerup');
-                            score += 50;
-                            totalStarsCollected += 25;
+                            triggerScreenShake(18);
+                            score += 75;
+                            totalStarsCollected += 30;
                             localStorage.setItem('chibi_total_stars', totalStarsCollected);
-                            lives = Math.min(5, lives + 1);
+                            lives = Math.min(maxLives, lives + 1);
                             bossStage++;
                             updateScoreUI();
                             updateLivesUI();
-
                             if (!achFirstBoss) {
                                 achFirstBoss = true;
                                 unlockAchievement("First Boss Defeated!", "fa-skull");
                             }
-
-                            showToast(`STAGE ${bossStage - 1} CLEAR! +25 STARS!`);
+                            showToast(`STAGE ${bossStage - 1} CLEAR! +30 STARS!`);
                             spawnBoss();
+                        } else if (Math.random() < 0.25) {
+                            boss.polarity = boss.polarity === 'N' ? 'S' : 'N';
+                            updateBossPolarityUI();
                         }
 
                         projectiles.splice(i, 1);
@@ -880,7 +1483,6 @@
                 if (p.y < -30) projectiles.splice(i, 1);
             }
 
-            // Update Power-ups
             for (let i = powerUps.length - 1; i >= 0; i--) {
                 let pu = powerUps[i];
                 pu.y += pu.speed;
@@ -888,6 +1490,7 @@
 
                 if (dist < 32 + pu.size/2) {
                     playSound('match');
+                    triggerHaptic([35]);
                     if (pu.type === 'shield') {
                         activeShield = true;
                         powerUpTimer = 350;
@@ -901,9 +1504,19 @@
                         powerUpTimer = 250;
                         triggerPowerUpBanner('TIME SLOWED DOWN!', 'fa-clock');
                     } else if (pu.type === 'heart') {
-                        lives = Math.min(5, lives + 1);
+                        lives = Math.min(maxLives, lives + 1);
                         updateLivesUI();
                         triggerPowerUpBanner('+1 EXTRA HEART!', 'fa-heart');
+                    } else if (pu.type === 'magnet') {
+                        activeMagnet = true;
+                        powerUpTimer = 300;
+                        triggerPowerUpBanner('MAGNET ACTIVE!', 'fa-magnet');
+                    } else if (pu.type === 'prism') {
+                        activePrism = true;
+                        powerUpTimer = 320;
+                        triggerPowerUpBanner('COLOR PRISM UNLEASHED!', 'fa-rainbow');
+                    } else if (pu.type === 'bomb') {
+                        triggerBombExplosion();
                     }
                     powerUps.splice(i, 1);
                 } else if (pu.y > height + 50) {
@@ -911,32 +1524,52 @@
                 }
             }
 
-            // Update Falling Color Blocks
+            const magnetBonusPerk = currentEquippedPet === 'fairy' ? 1.15 : 1;
+            const magnetRadiusBonus = (1 + (statUpgradesLevel.magnetRadius || 0) * 0.2) * magnetBonusPerk;
+            const magnetPullRadius = 150 * magnetRadiusBonus;
+
             for (let i = blocks.length - 1; i >= 0; i--) {
                 let b = blocks[i];
-                b.y += b.speed;
 
+                if ((activeMagnet || currentEquippedPet === 'fairy') && (b.polarity === playerPolarity || activePrism)) {
+                    const blockCx = b.x + b.size/2;
+                    const blockCy = b.y + b.size/2;
+                    const distToPlayer = Math.hypot(blockCx - playerX, blockCy - playerY);
+                    if (distToPlayer < magnetPullRadius) {
+                        const angle = Math.atan2(playerY - blockCy, playerX - blockCx);
+                        b.x += Math.cos(angle) * 7;
+                        b.y += Math.sin(angle) * 7;
+                    }
+                }
+
+                b.y += b.speed;
                 const charRadius = 32;
                 const dist = Math.hypot((b.x + b.size/2) - playerX, (b.y + b.size/2) - playerY);
 
                 if (dist < charRadius + b.size/2) {
-                    if (b.polarity === playerPolarity) {
+                    if (b.polarity === playerPolarity || activePrism) {
                         playSound('match');
+                        triggerHaptic([25]);
                         comboCount++;
-                        totalStarsCollected++;
-                        localStorage.setItem('chibi_total_stars', totalStarsCollected);
+                        
+                        let starEarned = currentEquippedPet === 'cat' ? 1.25 : 1.0;
+                        totalStarsCollected += starEarned;
+                        localStorage.setItem('chibi_total_stars', Math.floor(totalStarsCollected));
 
                         const pts = (activeMultiplier ? 20 : 10) + (isFeverActive ? 15 : 0);
                         score += pts;
                         updateScoreUI();
 
-                        if (comboCount % 5 === 0) {
-                            triggerComboBanner(`${comboCount}x COMBO STREAK!`);
-                        }
+                        addFloatingText(b.x, b.y, `+${pts}`, activePrism ? skinDef.hair1 : (b.polarity === 'N' ? skinDef.hair1 : skinDef.hair2));
+
+                        if (comboCount % 5 === 0) triggerComboBanner(`${comboCount}x COMBO STREAK!`);
+
+                        const feverBonusMultiplier = 1 + (statUpgradesLevel.feverDuration || 0) * 0.25;
+                        const feverTicks = Math.round(300 * feverBonusMultiplier);
 
                         if (comboCount >= 10 && !isFeverActive) {
                             isFeverActive = true;
-                            feverTimer = 300;
+                            feverTimer = feverTicks;
                             playSound('fever');
                             triggerComboBanner("🔥 FEVER MODE UNLEASHED! 🔥");
                             if (!achFever) {
@@ -963,14 +1596,7 @@
                         }
 
                         for (let p = 0; p < 10; p++) {
-                            particles.push({
-                                x: b.x + b.size/2,
-                                y: b.y + b.size/2,
-                                vx: (Math.random() - 0.5) * 7,
-                                vy: (Math.random() - 0.5) * 7,
-                                color: b.polarity === 'N' ? '#ef4444' : '#3b82f6',
-                                life: 22
-                            });
+                            particles.push({ x: b.x + b.size/2, y: b.y + b.size/2, vx: (Math.random() - 0.5) * 7, vy: (Math.random() - 0.5) * 7, color: b.polarity === 'N' ? skinDef.hair1 : skinDef.hair2, life: 22 });
                         }
                         blocks.splice(i, 1);
                     } else {
@@ -980,22 +1606,17 @@
                             triggerPowerUpBanner('SHIELD BLOCKED DAMAGE!', 'fa-shield');
                         } else {
                             playSound('damage');
+                            triggerHaptic([60, 40, 60]);
+                            triggerScreenShake(12);
                             lives--;
                             updateLivesUI();
 
                             for (let p = 0; p < 12; p++) {
-                                particles.push({
-                                    x: playerX,
-                                    y: playerY,
-                                    vx: (Math.random() - 0.5) * 8,
-                                    vy: (Math.random() - 0.5) * 8,
-                                    color: '#f43f5e',
-                                    life: 25
-                                });
+                                particles.push({ x: playerX, y: playerY, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8, color: '#f43f5e', life: 25 });
                             }
 
                             if (lives <= 0) {
-                                gameOver();
+                                checkReviveOrGameOver();
                                 return;
                             }
                         }
@@ -1007,6 +1628,17 @@
                 }
             }
 
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                let ft = floatingTexts[i];
+                ft.y += ft.vy;
+                ft.life--;
+                if (ft.life <= 0) floatingTexts.splice(i, 1);
+            }
+            for (let i = trailParticles.length - 1; i >= 0; i--) {
+                let tp = trailParticles[i];
+                tp.life--;
+                if (tp.life <= 0) trailParticles.splice(i, 1);
+            }
             for (let i = particles.length - 1; i >= 0; i--) {
                 let pt = particles[i];
                 pt.x += pt.vx;
@@ -1016,12 +1648,23 @@
             }
         }
 
+        function checkReviveOrGameOver() {
+            if (currentEquippedPet === 'phoenix' && !phoenixReviveUsed) {
+                phoenixReviveUsed = true;
+                lives = 2;
+                updateLivesUI();
+                triggerPowerUpBanner('PHOENIX CHICK REVIVE!', 'fa-dove');
+                triggerScreenShake(15);
+                return;
+            }
+            gameOver();
+        }
+
         function drawShape(ctx, shape, x, y, size, color) {
             ctx.fillStyle = color;
             ctx.shadowColor = color;
             ctx.shadowBlur = 12;
             ctx.beginPath();
-
             const cx = x + size/2;
             const cy = y + size/2;
             const r = size/2;
@@ -1064,266 +1707,297 @@
         }
 
         function draw() {
+            ctx.save();
             ctx.clearRect(0, 0, width, height);
 
-            // Draw Background Grid
-            if (isFeverActive) {
-                ctx.strokeStyle = `rgba(245, 158, 11, ${0.15 + Math.sin(Date.now() * 0.01) * 0.1})`;
-            } else {
-                ctx.strokeStyle = gameMode === 'boss' ? 'rgba(147, 51, 234, 0.15)' : 'rgba(30, 41, 59, 0.4)';
-            }
-            ctx.lineWidth = 1;
-            const step = 40;
-            for (let x = 0; x < width; x += step) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-            for (let y = 0; y < height; y += step) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
+            if (screenShakeTime > 0) {
+                ctx.translate((Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8);
             }
 
-            // Draw Boss in Boss Mode
+            const skinDef = HERO_SKINS.find(s => s.id === currentEquippedSkin) || HERO_SKINS[0];
+
+            if (isFeverActive) {
+                const waveOffset = (Date.now() * 0.05) % 40;
+                ctx.strokeStyle = `rgba(245, 158, 11, ${0.25 + Math.sin(Date.now() * 0.01) * 0.15})`;
+                ctx.lineWidth = 1.5;
+                for (let y = waveOffset; y < height; y += 40) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+                }
+            } else {
+                ctx.strokeStyle = gameMode === 'boss' ? 'rgba(147, 51, 234, 0.15)' : 'rgba(30, 41, 59, 0.4)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < width; x += 40) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+                }
+                for (let y = 0; y < height; y += 40) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+                }
+            }
+
+            trailParticles.forEach(tp => {
+                ctx.fillStyle = tp.color;
+                ctx.shadowColor = tp.color;
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.arc(tp.x, tp.y, tp.size * (tp.life / 20), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            if (gameMode === 'boss' && boss) {
+                if (boss.isChargingLaser) {
+                    ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
+                    ctx.fillRect(boss.laserX - 25, 0, 50, height);
+                    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.moveTo(boss.laserX - 25, 0); ctx.lineTo(boss.laserX - 25, height);
+                    ctx.moveTo(boss.laserX + 25, 0); ctx.lineTo(boss.laserX + 25, height); ctx.stroke();
+                } else if (boss.isFiringLaser) {
+                    ctx.fillStyle = 'rgba(244, 63, 94, 0.85)';
+                    ctx.shadowColor = '#f43f5e'; ctx.shadowBlur = 30;
+                    ctx.fillRect(boss.laserX - 35, 0, 70, height);
+                    ctx.shadowBlur = 0;
+                }
+            }
+
             if (gameMode === 'boss' && boss) {
                 ctx.save();
                 ctx.translate(boss.x, boss.y);
+                ctx.shadowColor = boss.hitTimer > 0 ? '#ffffff' : boss.typeInfo.color;
+                ctx.shadowBlur = boss.hitTimer > 0 ? 30 : 20;
 
-                if (boss.hitTimer > 0) {
-                    ctx.shadowColor = '#ffffff';
-                    ctx.shadowBlur = 30;
-                } else {
-                    ctx.shadowColor = '#a855f7';
-                    ctx.shadowBlur = 20;
-                }
+                ctx.fillStyle = boss.typeInfo.color;
+                ctx.beginPath(); ctx.arc(0, 0, 45, 0, Math.PI * 2); ctx.fill();
 
-                ctx.fillStyle = '#581c87';
+                ctx.fillStyle = boss.typeInfo.crownColor;
                 ctx.beginPath();
-                ctx.arc(0, 0, 45, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.moveTo(-25, -25); ctx.lineTo(-35, -55); ctx.lineTo(-10, -35); ctx.lineTo(0, -60);
+                ctx.lineTo(10, -35); ctx.lineTo(35, -55); ctx.lineTo(25, -25); ctx.closePath(); ctx.fill();
 
-                ctx.fillStyle = '#f43f5e';
-                ctx.beginPath();
-                ctx.moveTo(-25, -25);
-                ctx.lineTo(-35, -55);
-                ctx.lineTo(-10, -35);
-                ctx.lineTo(0, -60);
-                ctx.lineTo(10, -35);
-                ctx.lineTo(35, -55);
-                ctx.lineTo(25, -25);
-                ctx.closePath();
-                ctx.fill();
+                ctx.fillStyle = boss.hitTimer > 0 ? '#ffffff' : '#0f172a';
+                ctx.beginPath(); ctx.arc(0, 0, 32, 0, Math.PI * 2); ctx.fill();
 
-                ctx.fillStyle = boss.hitTimer > 0 ? '#ffffff' : '#1e1b4b';
-                ctx.beginPath();
-                ctx.arc(0, 0, 32, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = boss.typeInfo.eyeColor;
+                ctx.beginPath(); ctx.arc(-12, -6, 7, 0, Math.PI * 2); ctx.arc(12, -6, 7, 0, Math.PI * 2); ctx.fill();
 
-                ctx.fillStyle = '#f43f5e';
-                ctx.beginPath();
-                ctx.arc(-12, -6, 7, 0, Math.PI * 2);
-                ctx.arc(12, -6, 7, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(-10, -8, 2.5, 0, Math.PI * 2);
-                ctx.arc(14, -8, 2.5, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.strokeStyle = '#f43f5e';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.arc(0, 12, 10, Math.PI, 0);
-                ctx.stroke();
-
+                ctx.fillStyle = boss.polarity === 'N' ? skinDef.hair1 : skinDef.hair2;
+                ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center';
+                ctx.fillText(boss.polarity === 'N' ? 'WEAK: N' : 'WEAK: S', 0, 16);
                 ctx.restore();
             }
 
-            // Draw Boss Attacks
             bossProjectiles.forEach(bp => {
-                ctx.fillStyle = '#a855f7';
-                ctx.shadowColor = '#ec4899';
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.arc(bp.x, bp.y, bp.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#a855f7'; ctx.shadowColor = '#ec4899'; ctx.shadowBlur = 10;
+                ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.size, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
             });
 
-            // Draw Hero Projectiles
             projectiles.forEach(p => {
-                ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color;
-                ctx.shadowBlur = p.isSuper ? 22 : 12;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
+                ctx.fillStyle = p.color; ctx.shadowColor = p.color; ctx.shadowBlur = p.isSuper ? 22 : 12;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
             });
 
-            // Draw Power-ups
             powerUps.forEach(pu => {
-                ctx.fillStyle = '#f59e0b';
-                ctx.shadowColor = '#f59e0b';
-                ctx.shadowBlur = 15;
-                ctx.beginPath();
-                ctx.roundRect(pu.x, pu.y, pu.size, pu.size, 10);
-                ctx.fill();
-                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#f59e0b'; ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 15;
+                ctx.beginPath(); ctx.roundRect(pu.x, pu.y, pu.size, pu.size, 10); ctx.fill(); ctx.shadowBlur = 0;
 
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 12px Inter';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#ffffff'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 let iconText = '🛡️';
                 if (pu.type === 'multiplier') iconText = '2X';
                 else if (pu.type === 'slow') iconText = '⏱️';
                 else if (pu.type === 'heart') iconText = '💖';
+                else if (pu.type === 'magnet') iconText = '🧲';
+                else if (pu.type === 'prism') iconText = '🌈';
+                else if (pu.type === 'bomb') iconText = '💣';
                 ctx.fillText(iconText, pu.x + pu.size/2, pu.y + pu.size/2);
             });
 
-            // Draw Falling Objects
             blocks.forEach(b => {
-                const color = b.polarity === 'N' ? '#ef4444' : '#3b82f6';
-                drawShape(ctx, b.shape, b.x, b.y, b.size, color);
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 11px Inter';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
+                const blockColor = b.polarity === 'N' ? skinDef.hair1 : skinDef.hair2;
+                drawShape(ctx, b.shape, b.x, b.y, b.size, blockColor);
+                ctx.fillStyle = '#ffffff'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText(b.polarity, b.x + b.size/2, b.y + b.size/2);
             });
 
-            // Draw Particles
             particles.forEach(pt => {
-                ctx.fillStyle = pt.color;
-                ctx.beginPath();
-                ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = pt.color; ctx.beginPath(); ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2); ctx.fill();
             });
 
-            // --- Draw Customizable Chibi Hero Character ---
-            const equipped = HERO_SKINS.find(s => s.id === currentEquippedSkin) || HERO_SKINS[0];
-            const themeColor = playerPolarity === 'N' ? '#ef4444' : '#3b82f6';
-            const shadowColor = playerPolarity === 'N' ? 'rgba(239, 68, 68, 0.6)' : 'rgba(59, 130, 246, 0.6)';
+            ctx.strokeStyle = activePrism ? 'rgba(236, 72, 153, 0.5)' : (playerPolarity === 'N' ? skinDef.hair1 : skinDef.hair2);
+            ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(playerX, playerY + 45, 30, 8, 0, 0, Math.PI * 2); ctx.stroke();
+
+            // --- Draw Companion Pet ---
+            if (currentEquippedPet !== 'none') {
+                const petX = playerX + Math.cos(petAngle) * 45;
+                const petY = (playerY - 15) + Math.sin(petAngle * 2) * 10;
+                ctx.fillStyle = currentEquippedPet === 'fairy' ? '#38bdf8' : (currentEquippedPet === 'dragon' ? '#ef4444' : (currentEquippedPet === 'cat' ? '#f59e0b' : '#ec4899'));
+                ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 12;
+                ctx.beginPath(); ctx.arc(petX, petY, 12, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff'; ctx.font = '12px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                let petIcon = '✨';
+                if (currentEquippedPet === 'dragon') petIcon = '🐉';
+                else if (currentEquippedPet === 'cat') petIcon = '🐱';
+                else if (currentEquippedPet === 'phoenix') petIcon = '🕊️';
+                ctx.fillText(petIcon, petX, petY);
+            }
+
+            // --- Draw Chibi Character with Custom Hat, Arm, and Feet Accessories ---
+            const primaryColor = activePrism ? '#ff007f' : (playerPolarity === 'N' ? skinDef.hair1 : skinDef.hair2);
 
             if (activeShield) {
-                ctx.strokeStyle = '#38bdf8';
-                ctx.lineWidth = 3;
-                ctx.shadowColor = '#38bdf8';
-                ctx.shadowBlur = 15;
-                ctx.beginPath();
-                ctx.arc(playerX, playerY + 10, 42, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.shadowBlur = 0;
+                ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3; ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 15;
+                ctx.beginPath(); ctx.arc(playerX, playerY + 10, 42, 0, Math.PI * 2); ctx.stroke(); ctx.shadowBlur = 0;
             }
 
-            // Angel Wings (for Angel Skin)
-            if (equipped.id === 'angel') {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                ctx.beginPath();
-                ctx.ellipse(playerX - 28, playerY + 12, 14, 6, -Math.PI / 4, 0, Math.PI * 2);
-                ctx.ellipse(playerX + 28, playerY + 12, 14, 6, Math.PI / 4, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            // Outfit dress/body
+            ctx.fillStyle = skinDef.outfit;
+            ctx.beginPath(); ctx.roundRect(playerX - 16, playerY + 12, 32, 28, [10, 10, 4, 4]); ctx.fill();
 
-            // Outfit Body
-            ctx.fillStyle = themeColor;
-            ctx.beginPath();
-            ctx.roundRect(playerX - 18, playerY + 10, 36, 32, [12, 12, 6, 6]);
-            ctx.fill();
-
-            // Shoes
-            ctx.fillStyle = '#1e293b';
-            ctx.beginPath();
-            ctx.arc(playerX - 10, playerY + 45, 7, 0, Math.PI * 2);
-            ctx.arc(playerX + 10, playerY + 45, 7, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Hands
-            ctx.fillStyle = equipped.skinColor;
-            ctx.beginPath();
-            ctx.arc(playerX - 22, playerY + 22, 6, 0, Math.PI * 2);
-            ctx.arc(playerX + 22, playerY + 22, 6, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.shadowColor = shadowColor;
-            ctx.shadowBlur = 20;
-
-            // Head Base
-            ctx.fillStyle = equipped.skinColor;
-            ctx.beginPath();
-            ctx.arc(playerX, playerY - 10, 26, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
-
-            // Angel Halo
-            if (equipped.id === 'angel') {
-                ctx.strokeStyle = '#f59e0b';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.ellipse(playerX, playerY - 42, 14, 4, 0, 0, Math.PI * 2);
-                ctx.stroke();
-            }
-
-            // Hair Customization
-            ctx.fillStyle = playerPolarity === 'N' ? equipped.hairColorN : equipped.hairColorS;
-            ctx.beginPath();
-            ctx.arc(playerX, playerY - 18, 26, Math.PI, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(playerX - 22, playerY - 12, 10, 0, Math.PI * 2);
-            ctx.arc(playerX + 22, playerY - 12, 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Cyber Visor (Cyberpunk Skin)
-            if (equipped.id === 'cyberpunk') {
-                ctx.fillStyle = '#06b6d4';
-                ctx.shadowColor = '#06b6d4';
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.roundRect(playerX - 16, playerY - 15, 32, 10, 4);
-                ctx.fill();
-                ctx.shadowBlur = 0;
+            // Feet / Shoes Accessory (Properly rendered relative to player position)
+            const feetDef = FEET_ACCESSORIES.find(f => f.id === currentEquippedFeet) || FEET_ACCESSORIES[0];
+            ctx.fillStyle = feetDef.color;
+            if (currentEquippedFeet === 'rollers') {
+                ctx.beginPath(); ctx.arc(playerX - 10, playerY + 44, 6, 0, Math.PI * 2); ctx.arc(playerX + 10, playerY + 44, 6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#38bdf8'; ctx.fillRect(playerX - 14, playerY + 39, 28, 4);
+            } else if (currentEquippedFeet === 'slippers' || currentEquippedFeet === 'slippers_cat' || currentEquippedFeet === 'slippers_bear') {
+                ctx.beginPath(); ctx.ellipse(playerX - 9, playerY + 42, 9, 6, 0, 0, Math.PI * 2); ctx.ellipse(playerX + 9, playerY + 42, 9, 6, 0, 0, Math.PI * 2); ctx.fill();
+            } else if (currentEquippedFeet === 'wings') {
+                ctx.fillStyle = '#facc15';
+                ctx.beginPath(); ctx.moveTo(playerX - 12, playerY + 40); ctx.lineTo(playerX - 22, playerY + 34); ctx.lineTo(playerX - 10, playerY + 42);
+                ctx.moveTo(playerX + 12, playerY + 40); ctx.lineTo(playerX + 22, playerY + 34); ctx.lineTo(playerX + 10, playerY + 42); ctx.fill();
+                ctx.fillStyle = feetDef.color; ctx.arc(playerX - 9, playerY + 42, 6, 0, Math.PI * 2); ctx.arc(playerX + 9, playerY + 42, 6, 0, Math.PI * 2); ctx.fill();
             } else {
-                // Eyes
-                ctx.fillStyle = '#0f172a';
-                ctx.beginPath();
-                ctx.arc(playerX - 8, playerY - 10, 4.5, 0, Math.PI * 2);
-                ctx.arc(playerX + 8, playerY - 10, 4.5, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(playerX - 9.5, playerY - 11.5, 1.5, 0, Math.PI * 2);
-                ctx.arc(playerX + 6.5, playerY - 11.5, 1.5, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(playerX - 9, playerY + 42, 6, 0, Math.PI * 2); ctx.arc(playerX + 9, playerY + 42, 6, 0, Math.PI * 2); ctx.fill();
             }
 
-            // Rosy Cheeks
-            ctx.fillStyle = 'rgba(244, 63, 94, 0.4)';
+            // Arms / Hand Accessories (Properly rendered relative to player position)
+            const armDef = ARM_ACCESSORIES.find(a => a.id === currentEquippedArm) || ARM_ACCESSORIES[0];
+            ctx.fillStyle = skinDef.skin;
+            ctx.beginPath(); ctx.arc(playerX - 20, playerY + 22, 5, 0, Math.PI * 2); ctx.arc(playerX + 20, playerY + 22, 5, 0, Math.PI * 2); ctx.fill();
+            
+            if (currentEquippedArm !== 'none') {
+                ctx.strokeStyle = armDef.color; ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(playerX - 20, playerY + 22, 6, 0, Math.PI * 2);
+                ctx.arc(playerX + 20, playerY + 22, 6, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Head
+            ctx.fillStyle = skinDef.skin;
             ctx.beginPath();
-            ctx.arc(playerX - 14, playerY - 4, 5, 0, Math.PI * 2);
-            ctx.arc(playerX + 14, playerY - 4, 5, 0, Math.PI * 2);
+            if (skinDef.faceShape === 'sharp') {
+                ctx.ellipse(playerX, playerY - 8, 24, 26, 0, 0, Math.PI * 2);
+            } else if (skinDef.faceShape === 'soft') {
+                ctx.roundRect(playerX - 24, playerY - 32, 48, 50, 22);
+            } else {
+                ctx.arc(playerX, playerY - 8, 25, 0, Math.PI * 2);
+            }
             ctx.fill();
 
-            // Mouth
-            ctx.strokeStyle = '#0f172a';
-            ctx.lineWidth = 2;
+            // Hair Styles
+            ctx.fillStyle = primaryColor;
             ctx.beginPath();
-            ctx.arc(playerX, playerY - 5, 4, 0, Math.PI);
-            ctx.stroke();
+            if (skinDef.id === 'cyberpunk') {
+                ctx.arc(playerX, playerY - 14, 26, Math.PI, Math.PI * 2);
+                ctx.rect(playerX + 12, playerY - 35, 8, 25);
+            } else if (skinDef.id === 'demon') {
+                ctx.arc(playerX, playerY - 14, 25, Math.PI * 1.05, Math.PI * 1.95);
+                ctx.fill();
+                ctx.fillStyle = '#1e293b';
+                ctx.beginPath();
+                ctx.moveTo(playerX - 14, playerY - 28); ctx.lineTo(playerX - 22, playerY - 40); ctx.lineTo(playerX - 8, playerY - 32);
+                ctx.moveTo(playerX + 14, playerY - 28); ctx.lineTo(playerX + 22, playerY - 40); ctx.lineTo(playerX + 8, playerY - 32);
+            } else {
+                ctx.arc(playerX, playerY - 14, 25, Math.PI * 1.1, Math.PI * 1.9);
+                ctx.rect(playerX - 24, playerY - 10, 6, 24);
+                ctx.rect(playerX + 18, playerY - 10, 6, 24);
+            }
+            ctx.fill();
 
-            // Chest Badge
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 12px Inter';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(playerPolarity, playerX, playerY + 24);
+            // Hat Accessories (Head Slot - Properly positioned above chibi head)
+            const hatDef = HAT_ACCESSORIES.find(h => h.id === currentEquippedHat) || HAT_ACCESSORIES[0];
+            if (currentEquippedHat !== 'none') {
+                ctx.fillStyle = hatDef.color;
+                ctx.shadowColor = hatDef.color;
+                ctx.shadowBlur = 8;
+                if (currentEquippedHat === 'crown') {
+                    ctx.beginPath();
+                    ctx.moveTo(playerX - 12, playerY - 30); 
+                    ctx.lineTo(playerX - 18, playerY - 48); 
+                    ctx.lineTo(playerX - 6, playerY - 38); 
+                    ctx.lineTo(playerX, playerY - 52); 
+                    ctx.lineTo(playerX + 6, playerY - 38); 
+                    ctx.lineTo(playerX + 18, playerY - 48); 
+                    ctx.lineTo(playerX + 12, playerY - 30); 
+                    ctx.closePath(); 
+                    ctx.fill();
+                } else if (currentEquippedHat === 'cat_ears' || currentEquippedHat === 'fox_ears') {
+                    ctx.beginPath();
+                    ctx.moveTo(playerX - 18, playerY - 28); ctx.lineTo(playerX - 28, playerY - 44); ctx.lineTo(playerX - 10, playerY - 34);
+                    ctx.moveTo(playerX + 18, playerY - 28); ctx.lineTo(playerX + 28, playerY - 44); ctx.lineTo(playerX + 10, playerY - 34); 
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (currentEquippedHat === 'wizard') {
+                    ctx.beginPath();
+                    ctx.moveTo(playerX - 20, playerY - 28); ctx.lineTo(playerX + 20, playerY - 28); ctx.lineTo(playerX, playerY - 58); 
+                    ctx.closePath(); 
+                    ctx.fill();
+                } else if (currentEquippedHat === 'bunny') {
+                    ctx.beginPath();
+                    ctx.ellipse(playerX - 8, playerY - 46, 5, 16, -0.15, 0, Math.PI * 2);
+                    ctx.ellipse(playerX + 8, playerY - 46, 5, 16, 0.15, 0, Math.PI * 2); 
+                    ctx.fill();
+                } else if (currentEquippedHat === 'beret') {
+                    ctx.beginPath(); 
+                    ctx.ellipse(playerX + 4, playerY - 36, 18, 8, 0.2, 0, Math.PI * 2); 
+                    ctx.fill();
+                } else if (currentEquippedHat === 'halo') {
+                    ctx.strokeStyle = hatDef.color; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.ellipse(playerX, playerY - 42, 14, 5, 0, 0, Math.PI * 2); ctx.stroke();
+                } else {
+                    ctx.beginPath(); 
+                    ctx.ellipse(playerX, playerY - 34, 16, 7, 0, 0, Math.PI * 2); 
+                    ctx.fill();
+                }
+                ctx.shadowBlur = 0;
+            }
+
+            // Eyes & Expression
+            ctx.fillStyle = '#0f172a';
+            if (skinDef.expression === 'wink') {
+                ctx.beginPath(); ctx.arc(playerX - 8, playerY - 8, 4, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(playerX + 8, playerY - 8, 4, Math.PI, 0); ctx.stroke();
+            } else if (skinDef.expression === 'cool' || skinDef.expression === 'smirk') {
+                ctx.fillRect(playerX - 12, playerY - 10, 7, 3);
+                ctx.fillRect(playerX + 5, playerY - 10, 7, 3);
+            } else if (skinDef.expression === 'starry') {
+                ctx.fillStyle = '#f59e0b';
+                ctx.font = 'bold 10px Inter'; ctx.textAlign = 'center';
+                ctx.fillText('⭐', playerX - 8, playerY - 7);
+                ctx.fillText('⭐', playerX + 8, playerY - 7);
+            } else {
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath(); ctx.arc(playerX - 8, playerY - 8, 4.5, 0, Math.PI * 2); ctx.arc(playerX + 8, playerY - 8, 4.5, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath(); ctx.arc(playerX - 9.5, playerY - 9.5, 1.5, 0, Math.PI * 2); ctx.arc(playerX + 6.5, playerY - 9.5, 1.5, 0, Math.PI * 2); ctx.fill();
+            }
+
+            // Rosy Cheeks & Smile
+            ctx.fillStyle = 'rgba(255, 105, 180, 0.5)';
+            ctx.beginPath(); ctx.arc(playerX - 13, playerY - 2, 4.5, 0, Math.PI * 2); ctx.arc(playerX + 13, playerY - 2, 4.5, 0, Math.PI * 2); ctx.fill();
+
+            ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(playerX, playerY - 3, 2.5, 0, Math.PI); ctx.stroke();
+
+            // Polarity Badge on Outfit
+            ctx.fillStyle = '#ffffff'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(activePrism ? '🌈' : playerPolarity, playerX, playerY + 24);
+
+            floatingTexts.forEach(ft => {
+                ctx.fillStyle = ft.color; ctx.font = 'black 14px Inter'; ctx.textAlign = 'center'; ctx.fillText(ft.text, ft.x, ft.y);
+            });
+
+            ctx.restore();
         }
 
         function gameLoop() {
