@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chibi Color Panic - Deluxe Edition</title>
+    <!-- Tailwind CSS for sleek mobile UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            background: #090d16;
+            color: #f8fafc;
+            overflow: hidden;
+        }
+        .glow-north {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .glow-south {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        @keyframes pulse-fever {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.8)); }
+            50% { filter: drop-shadow(0 0 30px rgba(236, 72, 153, 1)); }
+        }
+        .fever-glow {
+            animation: pulse-fever 0.6s infinite alternate;
+        }
+    </style>
+</head>
+<body class="w-screen h-screen flex flex-col justify-between items-center overflow-hidden">
+
+    <!-- Top HUD Bar -->
+    <header class="w-full max-w-md px-4 py-3 flex justify-between items-center bg-slate-900/90 backdrop-blur border-b border-slate-800 z-10">
+        <div class="flex items-center space-x-2">
+            <div class="bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center space-x-1.5 shadow-inner cursor-pointer" onclick="openShop()">
+                <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                <span id="score-display" class="text-sm font-bold text-white">0</span>
+            </div>
+            <div class="bg-slate-800/90 px-2.5 py-1.5 rounded-xl border border-slate-700 flex items-center space-x-1 shadow-inner" id="lives-container">
+                <i class="fa-solid fa-heart text-rose-500 text-xs"></i>
+                <span id="lives-display" class="text-xs font-bold text-white">3</span>
+            </div>
+        </div>
+        <div class="text-center">
+            <h1 class="text-xs font-black tracking-wider uppercase bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">Chibi Panic</h1>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="openShop()" class="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 active:scale-95 w-9 h-9 rounded-xl flex items-center justify-center border border-amber-400 transition text-white shadow-lg shadow-amber-950/40" title="Hero Shop">
+                <i class="fa-solid fa-shirt text-xs"></i>
+            </button>
+            <button onclick="toggleMusic()" class="bg-slate-800 hover:bg-slate-700 active:scale-95 w-9 h-9 rounded-xl flex items-center justify-center border border-slate-700 transition" title="BGM Music">
+                <i class="fa-solid fa-music text-purple-400" id="music-icon"></i>
+            </button>
+            <button onclick="toggleSound()" class="bg-slate-800 hover:bg-slate-700 active:scale-95 w-9 h-9 rounded-xl flex items-center justify-center border border-slate-700 transition" title="Sound Effects">
+                <i class="fa-solid fa-volume-high text-indigo-400" id="sound-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Canvas Area -->
+    <main class="relative flex-1 w-full max-w-md flex flex-col items-center justify-center overflow-hidden bg-slate-950">
+        <canvas id="gameCanvas" class="w-full h-full block cursor-pointer"></canvas>
+
+        <!-- Boss Health HUD Container (Boss Mode Only) -->
+        <div id="boss-hud" class="absolute top-3 left-4 right-4 bg-slate-900/90 backdrop-blur border border-purple-500/50 p-2.5 rounded-2xl shadow-xl z-20 hidden flex-col space-y-1.5 transition-all duration-500">
+            <div class="flex justify-between items-center px-1">
+                <span class="text-xs font-black text-purple-300 flex items-center space-x-1">
+                    <i class="fa-solid fa-skull text-rose-500 animate-pulse mr-1"></i>
+                    <span id="boss-name">VOID CHIBI EMPRESS</span>
+                    <span id="boss-stage-badge" class="bg-purple-950 border border-purple-500/50 text-purple-300 text-[9px] px-1.5 py-0.5 rounded-md ml-1">LV.1</span>
+                </span>
+                <span id="boss-hp-text" class="text-[11px] font-black text-rose-400">100 / 100</span>
+            </div>
+            <div class="w-full h-3.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800 relative">
+                <div id="boss-hp-bar" class="h-full bg-gradient-to-r from-rose-600 via-purple-500 to-indigo-500 rounded-full transition-all duration-300 w-full shadow-lg shadow-rose-500/50"></div>
+            </div>
+        </div>
+
+        <!-- Hero Attack Power Bar HUD (Boss Mode Only) -->
+        <div id="hero-charge-hud" class="absolute bottom-3 left-4 right-4 bg-slate-900/85 backdrop-blur border border-slate-800 px-3 py-1.5 rounded-xl z-10 flex items-center space-x-2 hidden">
+            <i class="fa-solid fa-bolt text-amber-400 text-xs animate-bounce"></i>
+            <div class="flex-1 flex flex-col space-y-0.5">
+                <div class="flex justify-between items-center text-[10px] font-bold">
+                    <span class="text-slate-300">ATTACK POWER</span>
+                    <span id="charge-text" class="text-amber-400">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div id="charge-bar" class="h-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-200 w-0"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combo Streak Banner Floating in Center Top -->
+        <div id="combo-banner" class="absolute top-16 left-1/2 -translate-x-1/2 bg-amber-500/90 backdrop-blur border border-amber-300 text-slate-950 font-black text-xs px-3.5 py-1 rounded-full shadow-xl opacity-0 transition-all duration-300 pointer-events-none z-20 flex items-center space-x-1.5">
+            <i class="fa-solid fa-fire text-rose-950 animate-bounce"></i>
+            <span id="combo-text">5x COMBO STREAK!</span>
+        </div>
+
+        <!-- Active Power-up Indicator Banner -->
+        <div id="powerup-banner" class="absolute top-24 left-1/2 -translate-x-1/2 bg-indigo-600/90 backdrop-blur border border-indigo-400 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-20 flex items-center space-x-1.5">
+            <i class="fa-solid fa-bolt text-amber-300" id="powerup-icon"></i>
+            <span id="powerup-text">POWER-UP ACTIVE</span>
+        </div>
+
+        <!-- Achievement Notification Pop-up Toast -->
+        <div id="achievement-toast" class="absolute top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 border border-amber-300 text-white p-2.5 rounded-2xl shadow-2xl opacity-0 pointer-events-none transition-all duration-500 z-50 flex items-center space-x-3 max-w-xs">
+            <div class="w-9 h-9 rounded-xl bg-slate-950/80 flex items-center justify-center text-amber-400 text-base shadow-inner shrink-0">
+                <i class="fa-solid fa-trophy" id="ach-icon"></i>
+            </div>
+            <div class="flex-1 text-left">
+                <div class="text-[9px] uppercase font-black tracking-wider text-amber-200">Achievement Unlocked!</div>
+                <div id="ach-title" class="text-xs font-black leading-tight">10-Combo Master</div>
+            </div>
+        </div>
+
+        <!-- Mode Select Start Overlay -->
+        <div id="start-overlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-rose-500 via-purple-500 to-indigo-500 p-1 shadow-2xl mb-3 animate-bounce">
+                <div class="w-full h-full bg-slate-900 rounded-[22px] flex items-center justify-center text-3xl">
+                    🌸
+                </div>
+            </div>
+            <h2 class="text-2xl font-black text-white mb-1">CHIBI COLOR PANIC</h2>
+            <p class="text-xs text-slate-400 max-w-xs mb-5 leading-relaxed">
+                Match color polarity, unleash Fever Mode, and unlock magical Chibi skins!
+            </p>
+
+            <div class="w-full max-w-xs space-y-2.5">
+                <button onclick="startGame('classic')" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 active:scale-95 text-white p-3 rounded-2xl shadow-lg transition text-left flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 text-lg group-hover:scale-110 transition">
+                        <i class="fa-solid fa-infinity"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-black text-white">CLASSIC ENDLESS</div>
+                        <div class="text-[10px] text-slate-400">Build high combos & trigger Fever Mode!</div>
+                    </div>
+                </button>
+
+                <button onclick="startGame('boss')" class="w-full bg-gradient-to-r from-rose-950/80 to-purple-950/80 hover:from-rose-900/80 hover:to-purple-900/80 border border-rose-500/40 active:scale-95 text-white p-3 rounded-2xl shadow-xl transition text-left flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 text-lg group-hover:scale-110 transition">
+                        <i class="fa-solid fa-skull"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-black text-rose-300">BOSS FIGHT MODE</div>
+                        <div class="text-[10px] text-rose-200/70">Charge attack energy & blast bosses!</div>
+                    </div>
+                </button>
+
+                <button onclick="openShop()" class="w-full bg-slate-900/80 hover:bg-slate-800 border border-amber-500/30 active:scale-95 text-amber-300 p-2.5 rounded-2xl shadow-lg transition flex items-center justify-center space-x-2 text-xs font-bold">
+                    <i class="fa-solid fa-shirt text-amber-400"></i>
+                    <span>CHIBI HERO SKIN SHOP</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Controls & Color Switches -->
+    <footer class="w-full max-w-md bg-slate-900/90 backdrop-blur border-t border-slate-800 p-4 z-10 flex flex-col items-center space-y-3">
+        <div class="flex w-full justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full bg-red-500 glow-north"></div>
+                <span class="text-xs font-semibold text-slate-300">Ruby (Red)</span>
+            </div>
+            <span class="text-[11px] font-medium text-slate-500">Drag to Move • Tap to Switch</span>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs font-semibold text-slate-300">Azure (Blue)</span>
+                <div class="w-3 h-3 rounded-full bg-blue-500 glow-south"></div>
+            </div>
+        </div>
+
+        <!-- Big Color Switch Buttons -->
+        <div class="grid grid-cols-2 gap-3 w-full">
+            <button onclick="setPlayerPolarity('N')" id="btn-n" class="py-3 rounded-2xl bg-red-500/20 border-2 border-red-500/80 hover:bg-red-500/30 active:scale-95 text-red-400 font-black text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-red-950/50">
+                <i class="fa-solid fa-magnet"></i>
+                <span>NORTH (RED)</span>
+            </button>
+            <button onclick="setPlayerPolarity('S')" id="btn-s" class="py-3 rounded-2xl bg-blue-500/20 border-2 border-blue-500/80 hover:bg-blue-500/30 active:scale-95 text-blue-400 font-black text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-blue-950/50">
+                <i class="fa-solid fa-magnet"></i>
+                <span>SOUTH (BLUE)</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Chibi Hero Skin Shop Modal -->
+    <div id="shop-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 shadow-2xl text-center flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-shirt text-amber-400"></i>
+                    <h3 class="text-base font-black text-white">Chibi Hero Shop</h3>
+                </div>
+                <div class="bg-slate-800 px-3 py-1 rounded-xl border border-slate-700 text-xs font-bold text-amber-400 flex items-center space-x-1">
+                    <i class="fa-solid fa-star text-amber-400"></i>
+                    <span id="shop-stars-display">0</span>
+                </div>
+            </div>
+
+            <!-- Skin Grid Selection -->
+            <div class="grid grid-cols-2 gap-3 my-2 overflow-y-auto p-1" id="skins-container">
+                <!-- Injected dynamically via JS -->
+            </div>
+
+            <button onclick="closeShop()" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl transition text-xs border border-slate-700">
+                CLOSE SHOP
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameover-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-xs rounded-3xl p-6 shadow-2xl text-center flex flex-col items-center">
+            <div class="w-16 h-16 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-3xl mb-4 shadow-inner">
+                <i class="fa-solid fa-heart-crack"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">Game Over!</h3>
+            <p class="text-slate-400 text-xs mb-4">Your chibi hero ran out of hearts.</p>
+            
+            <div class="bg-slate-800/80 border border-slate-700 w-full rounded-2xl p-3 mb-6 flex justify-around">
+                <div>
+                    <div class="text-[10px] text-slate-400 uppercase font-semibold">Final Score</div>
+                    <div id="final-score" class="text-xl font-black text-white">0</div>
+                </div>
+                <div class="border-r border-slate-700"></div>
+                <div>
+                    <div class="text-[10px] text-slate-400 uppercase font-semibold">Best Score</div>
+                    <div id="best-score" class="text-xl font-black text-amber-400">0</div>
+                </div>
+            </div>
+
+            <button onclick="restartGame()" class="w-full bg-gradient-to-r from-indigo-600 to-rose-500 hover:from-indigo-500 hover:to-rose-400 active:scale-95 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition text-sm">
+                PLAY AGAIN
+            </button>
+        </div>
+    </div>
+
+    <!-- Generic Notification Toast -->
+    <div id="toast" class="absolute top-16 left-1/2 -translate-x-1/2 bg-slate-800/95 border border-slate-700 text-white text-xs px-4 py-2 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-info text-indigo-400"></i>
+        <span id="toast-msg">Notification message</span>
+    </div>
+
+    <script>
+        // --- Web Audio Synthesizer ---
+        let soundEnabled = true;
+        let musicEnabled = true;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Chiptune BGM Loop Generator
+        let bgmInterval = null;
+        const bgmNotes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 293.66]; // C4, E4, G4, C5, A4, F4, G4, D4
+        let bgmIndex = 0;
+
+        function playBGMStep() {
+            if (!musicEnabled || !soundEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(bgmNotes[bgmIndex], audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.18);
+                bgmIndex = (bgmIndex + 1) % bgmNotes.length;
+            } catch(e) {}
+        }
+
+        function startBGM() {
+            if (bgmInterval) clearInterval(bgmInterval);
+            bgmInterval = setInterval(playBGMStep, 220);
+        }
+
+        function stopBGM() {
+            if (bgmInterval) clearInterval(bgmInterval);
+            bgmInterval = null;
+        }
+
+        function toggleMusic() {
+            musicEnabled = !musicEnabled;
+            const icon = document.getElementById('music-icon');
+            if (musicEnabled) {
+                icon.className = "fa-solid fa-music text-purple-400";
+                startBGM();
+                showToast("BGM Music Enabled");
+            } else {
+                icon.className = "fa-solid fa-slash-forward text-slate-500";
+                stopBGM();
+                showToast("BGM Music Muted");
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'switch') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(450, now);
+                    osc.frequency.linearRampToValueAtTime(750, now + 0.06);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.06);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                } else if (type === 'match') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(587.33, now);
+                    osc.frequency.setValueAtTime(880, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'shoot') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.12);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'superBeam') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.linearRampToValueAtTime(900, now + 0.35);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'bossHit') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.18);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'fever') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.linearRampToValueAtTime(1000, now + 0.4);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'powerup') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.linearRampToValueAtTime(900, now + 0.2);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'damage') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.linearRampToValueAtTime(60, now + 0.25);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (soundEnabled) {
+                icon.className = "fa-solid fa-volume-high text-indigo-400";
+                showToast("Sound Effects Enabled");
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-slate-500";
+                showToast("Sound Muted");
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
+
+        function unlockAchievement(title, iconClass = 'fa-trophy') {
+            const achToast = document.getElementById('achievement-toast');
+            document.getElementById('ach-title').innerText = title;
+            document.getElementById('ach-icon').className = iconClass;
+            achToast.style.opacity = '1';
+            achToast.style.transform = 'translate(-50%, 10px)';
+            playSound('powerup');
+            setTimeout(() => {
+                achToast.style.opacity = '0';
+                achToast.style.transform = 'translate(-50%, 0px)';
+            }, 3000);
+        }
+
+        // --- Chibi Skins Data ---
+        const HERO_SKINS = [
+            { id: 'classic', name: 'Classic Hero', cost: 0, hairColorN: '#7f1d1d', hairColorS: '#1e3a8a', skinColor: '#fbcfe8', outfit: 'normal' },
+            { id: 'magical', name: 'Magical Girl', cost: 100, hairColorN: '#ec4899', hairColorS: '#a855f7', skinColor: '#ffe4e6', outfit: 'ribbon' },
+            { id: 'cyberpunk', name: 'Cyber Hero', cost: 250, hairColorN: '#06b6d4', hairColorS: '#10b981', skinColor: '#e0e7ff', outfit: 'visor' },
+            { id: 'angel', name: 'Angel Chibi', cost: 500, hairColorN: '#f59e0b', hairColorS: '#38bdf8', skinColor: '#fff1f2', outfit: 'angel' }
+        ];
+
+        let unlockedSkins = JSON.parse(localStorage.getItem('chibi_unlocked_skins')) || ['classic'];
+        let currentEquippedSkin = localStorage.getItem('chibi_equipped_skin') || 'classic';
+        let totalStarsCollected = parseInt(localStorage.getItem('chibi_total_stars')) || 0;
+
+        function openShop() {
+            document.getElementById('shop-stars-display').innerText = totalStarsCollected;
+            const container = document.getElementById('skins-container');
+            container.innerHTML = '';
+
+            HERO_SKINS.forEach(skin => {
+                const isUnlocked = unlockedSkins.includes(skin.id);
+                const isEquipped = currentEquippedSkin === skin.id;
+
+                let btnHtml = '';
+                if (isEquipped) {
+                    btnHtml = `<span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-1 rounded-md border border-emerald-500/40">EQUIPPED</span>`;
+                } else if (isUnlocked) {
+                    btnHtml = `<button onclick="equipSkin('${skin.id}')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded-md shadow transition">EQUIP</button>`;
+                } else {
+                    btnHtml = `<button onclick="buySkin('${skin.id}')" class="text-[10px] bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-2.5 py-1 rounded-md shadow transition flex items-center space-x-1"><i class="fa-solid fa-star text-[9px]"></i><span>${skin.cost}</span></button>`;
+                }
+
+                container.innerHTML += `
+                    <div class="bg-slate-800/80 border border-slate-700 p-2.5 rounded-2xl flex flex-col items-center justify-between text-center space-y-2">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background: ${skin.hairColorN}20; border: 1px solid ${skin.hairColorN}">
+                            🌸
+                        </div>
+                        <div class="text-xs font-black text-white">${skin.name}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+
+            document.getElementById('shop-modal').classList.remove('hidden');
+        }
+
+        function closeShop() {
+            document.getElementById('shop-modal').classList.add('hidden');
+        }
+
+        function buySkin(skinId) {
+            const skin = HERO_SKINS.find(s => s.id === skinId);
+            if (totalStarsCollected >= skin.cost) {
+                totalStarsCollected -= skin.cost;
+                localStorage.setItem('chibi_total_stars', totalStarsCollected);
+                unlockedSkins.push(skinId);
+                localStorage.setItem('chibi_unlocked_skins', JSON.stringify(unlockedSkins));
+                equipSkin(skinId);
+                openShop();
+                showToast(`Unlocked ${skin.name}!`);
+            } else {
+                showToast("Not enough Stars!");
+            }
+        }
+
+        function equipSkin(skinId) {
+            currentEquippedSkin = skinId;
+            localStorage.setItem('chibi_equipped_skin', skinId);
+            openShop();
+            showToast("Skin Equipped!");
+        }
+
+        // --- Game Core Variables ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        let gameRunning = false;
+        let gameMode = 'classic';
+        let score = 0;
+        let lives = 3;
+        let bestScore = localStorage.getItem('chibi_best') || 0;
+        let playerPolarity = 'N';
+        let playerX = 200;
+        let playerY = 0;
+        let targetX = 200;
+        let isDragging = false;
+
+        let blocks = [];
+        let powerUps = [];
+        let particles = [];
+        let projectiles = [];
+        let bossProjectiles = [];
+
+        let spawnTimer = 0;
+        let spawnInterval = 75;
+        let gameSpeed = 2.5;
+
+        // Combo & Fever System
+        let comboCount = 0;
+        let isFeverActive = false;
+        let feverTimer = 0;
+
+        // Achievements state
+        let achFirstBoss = false;
+        let ach10Combo = false;
+        let achFever = false;
+
+        // Boss Mode Variables
+        let attackEnergy = 0;
+        let boss = null;
+        let bossStage = 1;
+
+        // Active Power-up States
+        let activeShield = false;
+        let activeMultiplier = false;
+        let activeSlow = false;
+        let powerUpTimer = 0;
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            width = container.clientWidth;
+            height = container.clientHeight;
+            canvas.width = width * window.devicePixelRatio;
+            canvas.height = height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            if (!gameRunning) {
+                playerX = width / 2;
+                targetX = width / 2;
+            }
+            playerY = height - 110;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function startGame(mode = 'classic') {
+            gameMode = mode;
+            document.getElementById('start-overlay').classList.add('hidden');
+            score = 0;
+            lives = 3;
+            attackEnergy = 0;
+            bossStage = 1;
+            comboCount = 0;
+            isFeverActive = false;
+            feverTimer = 0;
+
+            blocks = [];
+            powerUps = [];
+            particles = [];
+            projectiles = [];
+            bossProjectiles = [];
+
+            spawnTimer = 0;
+            gameSpeed = 2.5;
+            spawnInterval = 75;
+            playerPolarity = 'N';
+            playerX = width / 2;
+            targetX = width / 2;
+            playerY = height - 110;
+            activeShield = false;
+            activeMultiplier = false;
+            activeSlow = false;
+
+            updateScoreUI();
+            updateLivesUI();
+            updatePolarityUI();
+
+            if (gameMode === 'boss') {
+                document.getElementById('hero-charge-hud').classList.remove('hidden');
+                document.getElementById('hero-charge-hud').classList.add('flex');
+                document.getElementById('boss-hud').classList.remove('hidden');
+                document.getElementById('boss-hud').classList.add('flex');
+                spawnBoss();
+                updateEnergyUI();
+            } else {
+                document.getElementById('hero-charge-hud').classList.add('hidden');
+                document.getElementById('boss-hud').classList.add('hidden');
+                boss = null;
+            }
+
+            if (musicEnabled) startBGM();
+            gameRunning = true;
+        }
+
+        function spawnBoss() {
+            const hpVal = 100 + (bossStage - 1) * 50;
+            boss = {
+                x: width / 2,
+                y: 80,
+                hp: hpVal,
+                maxHp: hpVal,
+                dir: 1,
+                speed: 1.5 + bossStage * 0.3,
+                hitTimer: 0,
+                attackCooldown: 0
+            };
+            document.getElementById('boss-stage-badge').innerText = `LV.${bossStage}`;
+            updateBossHPUI();
+        }
+
+        function setPlayerPolarity(pol) {
+            if (!gameRunning) return;
+            playerPolarity = pol;
+            playSound('switch');
+            updatePolarityUI();
+            
+            for (let i = 0; i < 6; i++) {
+                particles.push({
+                    x: playerX,
+                    y: playerY,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    color: playerPolarity === 'N' ? '#ef4444' : '#3b82f6',
+                    life: 20
+                });
+            }
+        }
+
+        function updatePolarityUI() {
+            const btnN = document.getElementById('btn-n');
+            const btnS = document.getElementById('btn-s');
+            if (playerPolarity === 'N') {
+                btnN.className = "py-3 rounded-2xl bg-red-500 border-2 border-red-400 text-white font-black text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-red-900/50 scale-[1.02]";
+                btnS.className = "py-3 rounded-2xl bg-slate-900/80 border-2 border-slate-800 text-slate-500 font-black text-sm transition flex items-center justify-center space-x-2";
+            } else {
+                btnS.className = "py-3 rounded-2xl bg-blue-500 border-2 border-blue-400 text-white font-black text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-blue-900/50 scale-[1.02]";
+                btnN.className = "py-3 rounded-2xl bg-slate-900/80 border-2 border-slate-800 text-slate-500 font-black text-sm transition flex items-center justify-center space-x-2";
+            }
+        }
+
+        function updateScoreUI() {
+            document.getElementById('score-display').innerText = score;
+        }
+
+        function updateLivesUI() {
+            document.getElementById('lives-display').innerText = lives;
+        }
+
+        function updateEnergyUI() {
+            const bar = document.getElementById('charge-bar');
+            const text = document.getElementById('charge-text');
+            const percent = Math.min(100, Math.floor(attackEnergy));
+            bar.style.width = percent + '%';
+            text.innerText = percent + '%';
+        }
+
+        function updateBossHPUI() {
+            if (!boss) return;
+            const bar = document.getElementById('boss-hp-bar');
+            const text = document.getElementById('boss-hp-text');
+            const pct = Math.max(0, Math.floor((boss.hp / boss.maxHp) * 100));
+            bar.style.width = pct + '%';
+            text.innerText = `${boss.hp} / ${boss.maxHp}`;
+        }
+
+        function triggerComboBanner(text) {
+            const banner = document.getElementById('combo-banner');
+            document.getElementById('combo-text').innerText = text;
+            banner.style.opacity = '1';
+            banner.style.transform = 'translate(-50%, 0px) scale(1.1)';
+            setTimeout(() => {
+                banner.style.opacity = '0';
+                banner.style.transform = 'translate(-50%, 0px) scale(1)';
+            }, 1800);
+        }
+
+        function triggerPowerUpBanner(text, iconClass) {
+            const banner = document.getElementById('powerup-banner');
+            document.getElementById('powerup-text').innerText = text;
+            document.getElementById('powerup-icon').className = iconClass + " text-amber-300";
+            banner.style.opacity = '1';
+            setTimeout(() => { banner.style.opacity = '0'; }, 3000);
+        }
+
+        function shootAttackProjectile(isSuper = false) {
+            if (isSuper) playSound('superBeam');
+            else playSound('shoot');
+
+            const color = playerPolarity === 'N' ? '#ef4444' : '#3b82f6';
+            projectiles.push({
+                x: playerX,
+                y: playerY - 30,
+                vy: isSuper ? -12 : -9,
+                radius: isSuper ? 20 : 9,
+                damage: isSuper ? 35 : 10,
+                color: isSuper ? '#f59e0b' : color,
+                isSuper: isSuper
+            });
+        }
+
+        // --- Touch & Pointer Controls ---
+        canvas.addEventListener('pointerdown', (e) => {
+            if (!gameRunning) return;
+            isDragging = true;
+            const rect = canvas.getBoundingClientRect();
+            targetX = e.clientX - rect.left;
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+            if (!gameRunning || !isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            targetX = e.clientX - rect.left;
+        });
+
+        window.addEventListener('pointerup', () => { isDragging = false; });
+
+        window.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+            if (e.key === 'ArrowLeft' || e.key === 'a') targetX = Math.max(30, targetX - 35);
+            if (e.key === 'ArrowRight' || e.key === 'd') targetX = Math.min(width - 30, targetX + 35);
+            if (e.key === ' ') setPlayerPolarity(playerPolarity === 'N' ? 'S' : 'N');
+        });
+
+        function spawnItem() {
+            if (Math.random() < 0.18 && powerUps.length === 0) {
+                const types = ['shield', 'multiplier', 'slow', 'heart'];
+                const pType = types[Math.floor(Math.random() * types.length)];
+                const x = Math.random() * (width - 60) + 30;
+                powerUps.push({
+                    x: x,
+                    y: -40,
+                    size: 34,
+                    type: pType,
+                    speed: 2.2
+                });
+                return;
+            }
+
+            const polarity = Math.random() < 0.5 ? 'N' : 'S';
+            const shapes = ['star', 'heart', 'diamond', 'bubble'];
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            const size = 38;
+            const x = Math.random() * (width - size - 60) + 30;
+            const currentSpeed = activeSlow ? (gameSpeed * 0.5) : gameSpeed;
+
+            blocks.push({
+                x: x,
+                y: -50,
+                size: size,
+                polarity: polarity,
+                shape: shape,
+                speed: currentSpeed + Math.random() * 0.6
+            });
+        }
+
+        function update() {
+            if (!gameRunning) return;
+
+            playerX += (targetX - playerX) * 0.2;
+            playerX = Math.max(35, Math.min(width - 35, playerX));
+
+            spawnTimer++;
+            const curInterval = isFeverActive ? 25 : spawnInterval;
+            if (spawnTimer >= curInterval) {
+                spawnItem();
+                spawnTimer = 0;
+                if (spawnInterval > 28) spawnInterval -= 1;
+                if (gameSpeed < 5.2) gameSpeed += 0.04;
+            }
+
+            // Fever Mode Timer
+            if (isFeverActive) {
+                feverTimer--;
+                if (feverTimer <= 0) {
+                    isFeverActive = false;
+                }
+            }
+
+            if (powerUpTimer > 0) {
+                powerUpTimer--;
+                if (powerUpTimer <= 0) {
+                    activeShield = false;
+                    activeMultiplier = false;
+                    activeSlow = false;
+                }
+            }
+
+            // Boss Logic
+            if (gameMode === 'boss' && boss) {
+                boss.x += boss.speed * boss.dir;
+                if (boss.x > width - 50 || boss.x < 50) boss.dir *= -1;
+                if (boss.hitTimer > 0) boss.hitTimer--;
+
+                boss.attackCooldown++;
+                if (boss.attackCooldown > Math.max(35, 85 - bossStage * 10)) {
+                    boss.attackCooldown = 0;
+                    bossProjectiles.push({
+                        x: boss.x,
+                        y: boss.y + 25,
+                        vx: (Math.random() - 0.5) * 3,
+                        vy: 4 + bossStage * 0.5,
+                        size: 12
+                    });
+                }
+            }
+
+            // Update Boss Projectiles
+            for (let i = bossProjectiles.length - 1; i >= 0; i--) {
+                let bp = bossProjectiles[i];
+                bp.x += bp.vx;
+                bp.y += bp.vy;
+                const dist = Math.hypot(bp.x - playerX, bp.y - playerY);
+                if (dist < bp.size + 20) {
+                    if (activeShield) {
+                        triggerPowerUpBanner('SHIELD BLOCKED ATTACK!', 'fa-shield');
+                        unlockAchievement("Flawless Shield Block", "fa-shield");
+                    } else {
+                        playSound('damage');
+                        comboCount = 0;
+                        lives--;
+                        updateLivesUI();
+                        if (lives <= 0) { gameOver(); return; }
+                    }
+                    bossProjectiles.splice(i, 1);
+                } else if (bp.y > height + 40) {
+                    bossProjectiles.splice(i, 1);
+                }
+            }
+
+            // Update Hero Projectiles
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                let p = projectiles[i];
+                p.y += p.vy;
+
+                if (boss) {
+                    const dist = Math.hypot(p.x - boss.x, p.y - boss.y);
+                    if (dist < p.radius + 35) {
+                        playSound('bossHit');
+                        boss.hp -= p.damage;
+                        boss.hitTimer = 8;
+                        updateBossHPUI();
+
+                        for (let k = 0; k < 12; k++) {
+                            particles.push({
+                                x: p.x,
+                                y: p.y,
+                                vx: (Math.random() - 0.5) * 8,
+                                vy: (Math.random() - 0.5) * 8,
+                                color: p.color,
+                                life: 20
+                            });
+                        }
+
+                        if (boss.hp <= 0) {
+                            playSound('powerup');
+                            score += 50;
+                            totalStarsCollected += 25;
+                            localStorage.setItem('chibi_total_stars', totalStarsCollected);
+                            lives = Math.min(5, lives + 1);
+                            bossStage++;
+                            updateScoreUI();
+                            updateLivesUI();
+
+                            if (!achFirstBoss) {
+                                achFirstBoss = true;
+                                unlockAchievement("First Boss Defeated!", "fa-skull");
+                            }
+
+                            showToast(`STAGE ${bossStage - 1} CLEAR! +25 STARS!`);
+                            spawnBoss();
+                        }
+
+                        projectiles.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                if (p.y < -30) projectiles.splice(i, 1);
+            }
+
+            // Update Power-ups
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                let pu = powerUps[i];
+                pu.y += pu.speed;
+                const dist = Math.hypot((pu.x + pu.size/2) - playerX, (pu.y + pu.size/2) - playerY);
+
+                if (dist < 32 + pu.size/2) {
+                    playSound('match');
+                    if (pu.type === 'shield') {
+                        activeShield = true;
+                        powerUpTimer = 350;
+                        triggerPowerUpBanner('SHIELD ACTIVE!', 'fa-shield-halved');
+                    } else if (pu.type === 'multiplier') {
+                        activeMultiplier = true;
+                        powerUpTimer = 300;
+                        triggerPowerUpBanner('2X SCORE MULTIPLIER!', 'fa-star');
+                    } else if (pu.type === 'slow') {
+                        activeSlow = true;
+                        powerUpTimer = 250;
+                        triggerPowerUpBanner('TIME SLOWED DOWN!', 'fa-clock');
+                    } else if (pu.type === 'heart') {
+                        lives = Math.min(5, lives + 1);
+                        updateLivesUI();
+                        triggerPowerUpBanner('+1 EXTRA HEART!', 'fa-heart');
+                    }
+                    powerUps.splice(i, 1);
+                } else if (pu.y > height + 50) {
+                    powerUps.splice(i, 1);
+                }
+            }
+
+            // Update Falling Color Blocks
+            for (let i = blocks.length - 1; i >= 0; i--) {
+                let b = blocks[i];
+                b.y += b.speed;
+
+                const charRadius = 32;
+                const dist = Math.hypot((b.x + b.size/2) - playerX, (b.y + b.size/2) - playerY);
+
+                if (dist < charRadius + b.size/2) {
+                    if (b.polarity === playerPolarity) {
+                        playSound('match');
+                        comboCount++;
+                        totalStarsCollected++;
+                        localStorage.setItem('chibi_total_stars', totalStarsCollected);
+
+                        const pts = (activeMultiplier ? 20 : 10) + (isFeverActive ? 15 : 0);
+                        score += pts;
+                        updateScoreUI();
+
+                        if (comboCount % 5 === 0) {
+                            triggerComboBanner(`${comboCount}x COMBO STREAK!`);
+                        }
+
+                        if (comboCount >= 10 && !isFeverActive) {
+                            isFeverActive = true;
+                            feverTimer = 300;
+                            playSound('fever');
+                            triggerComboBanner("🔥 FEVER MODE UNLEASHED! 🔥");
+                            if (!achFever) {
+                                achFever = true;
+                                unlockAchievement("Fever Frenzy!", "fa-fire");
+                            }
+                        }
+
+                        if (comboCount >= 10 && !ach10Combo) {
+                            ach10Combo = true;
+                            unlockAchievement("10-Combo Master!", "fa-bolt");
+                        }
+
+                        if (gameMode === 'boss') {
+                            attackEnergy += 25;
+                            if (attackEnergy >= 100) {
+                                attackEnergy = 0;
+                                shootAttackProjectile(true);
+                                showToast("SUPER BEAM UNLEASHED!");
+                            } else {
+                                shootAttackProjectile(false);
+                            }
+                            updateEnergyUI();
+                        }
+
+                        for (let p = 0; p < 10; p++) {
+                            particles.push({
+                                x: b.x + b.size/2,
+                                y: b.y + b.size/2,
+                                vx: (Math.random() - 0.5) * 7,
+                                vy: (Math.random() - 0.5) * 7,
+                                color: b.polarity === 'N' ? '#ef4444' : '#3b82f6',
+                                life: 22
+                            });
+                        }
+                        blocks.splice(i, 1);
+                    } else {
+                        comboCount = 0;
+                        if (activeShield) {
+                            playSound('match');
+                            triggerPowerUpBanner('SHIELD BLOCKED DAMAGE!', 'fa-shield');
+                        } else {
+                            playSound('damage');
+                            lives--;
+                            updateLivesUI();
+
+                            for (let p = 0; p < 12; p++) {
+                                particles.push({
+                                    x: playerX,
+                                    y: playerY,
+                                    vx: (Math.random() - 0.5) * 8,
+                                    vy: (Math.random() - 0.5) * 8,
+                                    color: '#f43f5e',
+                                    life: 25
+                                });
+                            }
+
+                            if (lives <= 0) {
+                                gameOver();
+                                return;
+                            }
+                        }
+                        blocks.splice(i, 1);
+                    }
+                } else if (b.y > height + 50) {
+                    comboCount = 0;
+                    blocks.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let pt = particles[i];
+                pt.x += pt.vx;
+                pt.y += pt.vy;
+                pt.life--;
+                if (pt.life <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function drawShape(ctx, shape, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+
+            const cx = x + size/2;
+            const cy = y + size/2;
+            const r = size/2;
+
+            if (shape === 'star') {
+                let rot = Math.PI / 2 * 3;
+                let step = Math.PI / 5;
+                ctx.moveTo(cx, cy - r);
+                for (let i = 0; i < 5; i++) {
+                    let x1 = cx + Math.cos(rot) * r;
+                    let y1 = cy + Math.sin(rot) * r;
+                    ctx.lineTo(x1, y1);
+                    rot += step;
+                    let x2 = cx + Math.cos(rot) * (r * 0.45);
+                    let y2 = cy + Math.sin(rot) * (r * 0.45);
+                    ctx.lineTo(x2, y2);
+                    rot += step;
+                }
+                ctx.closePath();
+                ctx.fill();
+            } else if (shape === 'heart') {
+                ctx.moveTo(cx, cy + r * 0.8);
+                ctx.bezierCurveTo(cx, cy + r * 0.2, cx - r, cy - r * 0.2, cx - r, cy - r * 0.5);
+                ctx.bezierCurveTo(cx - r, cy - r, cx - r * 0.4, cy - r, cx, cy - r * 0.5);
+                ctx.bezierCurveTo(cx + r * 0.4, cy - r, cx + r, cy - r, cx + r, cy - r * 0.5);
+                ctx.bezierCurveTo(cx + r, cy - r * 0.2, cx, cy + r * 0.2, cx, cy + r * 0.8);
+                ctx.fill();
+            } else if (shape === 'diamond') {
+                ctx.moveTo(cx, y);
+                ctx.lineTo(x + size, cy);
+                ctx.lineTo(cx, y + size);
+                ctx.lineTo(x, cy);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.shadowBlur = 0;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Background Grid
+            if (isFeverActive) {
+                ctx.strokeStyle = `rgba(245, 158, 11, ${0.15 + Math.sin(Date.now() * 0.01) * 0.1})`;
+            } else {
+                ctx.strokeStyle = gameMode === 'boss' ? 'rgba(147, 51, 234, 0.15)' : 'rgba(30, 41, 59, 0.4)';
+            }
+            ctx.lineWidth = 1;
+            const step = 40;
+            for (let x = 0; x < width; x += step) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < height; y += step) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // Draw Boss in Boss Mode
+            if (gameMode === 'boss' && boss) {
+                ctx.save();
+                ctx.translate(boss.x, boss.y);
+
+                if (boss.hitTimer > 0) {
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 30;
+                } else {
+                    ctx.shadowColor = '#a855f7';
+                    ctx.shadowBlur = 20;
+                }
+
+                ctx.fillStyle = '#581c87';
+                ctx.beginPath();
+                ctx.arc(0, 0, 45, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.beginPath();
+                ctx.moveTo(-25, -25);
+                ctx.lineTo(-35, -55);
+                ctx.lineTo(-10, -35);
+                ctx.lineTo(0, -60);
+                ctx.lineTo(10, -35);
+                ctx.lineTo(35, -55);
+                ctx.lineTo(25, -25);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = boss.hitTimer > 0 ? '#ffffff' : '#1e1b4b';
+                ctx.beginPath();
+                ctx.arc(0, 0, 32, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.beginPath();
+                ctx.arc(-12, -6, 7, 0, Math.PI * 2);
+                ctx.arc(12, -6, 7, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(-10, -8, 2.5, 0, Math.PI * 2);
+                ctx.arc(14, -8, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#f43f5e';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(0, 12, 10, Math.PI, 0);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Draw Boss Attacks
+            bossProjectiles.forEach(bp => {
+                ctx.fillStyle = '#a855f7';
+                ctx.shadowColor = '#ec4899';
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.arc(bp.x, bp.y, bp.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Draw Hero Projectiles
+            projectiles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = p.isSuper ? 22 : 12;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Draw Power-ups
+            powerUps.forEach(pu => {
+                ctx.fillStyle = '#f59e0b';
+                ctx.shadowColor = '#f59e0b';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.roundRect(pu.x, pu.y, pu.size, pu.size, 10);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                let iconText = '🛡️';
+                if (pu.type === 'multiplier') iconText = '2X';
+                else if (pu.type === 'slow') iconText = '⏱️';
+                else if (pu.type === 'heart') iconText = '💖';
+                ctx.fillText(iconText, pu.x + pu.size/2, pu.y + pu.size/2);
+            });
+
+            // Draw Falling Objects
+            blocks.forEach(b => {
+                const color = b.polarity === 'N' ? '#ef4444' : '#3b82f6';
+                drawShape(ctx, b.shape, b.x, b.y, b.size, color);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 11px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(b.polarity, b.x + b.size/2, b.y + b.size/2);
+            });
+
+            // Draw Particles
+            particles.forEach(pt => {
+                ctx.fillStyle = pt.color;
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // --- Draw Customizable Chibi Hero Character ---
+            const equipped = HERO_SKINS.find(s => s.id === currentEquippedSkin) || HERO_SKINS[0];
+            const themeColor = playerPolarity === 'N' ? '#ef4444' : '#3b82f6';
+            const shadowColor = playerPolarity === 'N' ? 'rgba(239, 68, 68, 0.6)' : 'rgba(59, 130, 246, 0.6)';
+
+            if (activeShield) {
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 3;
+                ctx.shadowColor = '#38bdf8';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(playerX, playerY + 10, 42, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+
+            // Angel Wings (for Angel Skin)
+            if (equipped.id === 'angel') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.ellipse(playerX - 28, playerY + 12, 14, 6, -Math.PI / 4, 0, Math.PI * 2);
+                ctx.ellipse(playerX + 28, playerY + 12, 14, 6, Math.PI / 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Outfit Body
+            ctx.fillStyle = themeColor;
+            ctx.beginPath();
+            ctx.roundRect(playerX - 18, playerY + 10, 36, 32, [12, 12, 6, 6]);
+            ctx.fill();
+
+            // Shoes
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.arc(playerX - 10, playerY + 45, 7, 0, Math.PI * 2);
+            ctx.arc(playerX + 10, playerY + 45, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Hands
+            ctx.fillStyle = equipped.skinColor;
+            ctx.beginPath();
+            ctx.arc(playerX - 22, playerY + 22, 6, 0, Math.PI * 2);
+            ctx.arc(playerX + 22, playerY + 22, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.shadowColor = shadowColor;
+            ctx.shadowBlur = 20;
+
+            // Head Base
+            ctx.fillStyle = equipped.skinColor;
+            ctx.beginPath();
+            ctx.arc(playerX, playerY - 10, 26, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Angel Halo
+            if (equipped.id === 'angel') {
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.ellipse(playerX, playerY - 42, 14, 4, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Hair Customization
+            ctx.fillStyle = playerPolarity === 'N' ? equipped.hairColorN : equipped.hairColorS;
+            ctx.beginPath();
+            ctx.arc(playerX, playerY - 18, 26, Math.PI, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(playerX - 22, playerY - 12, 10, 0, Math.PI * 2);
+            ctx.arc(playerX + 22, playerY - 12, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Cyber Visor (Cyberpunk Skin)
+            if (equipped.id === 'cyberpunk') {
+                ctx.fillStyle = '#06b6d4';
+                ctx.shadowColor = '#06b6d4';
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.roundRect(playerX - 16, playerY - 15, 32, 10, 4);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            } else {
+                // Eyes
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath();
+                ctx.arc(playerX - 8, playerY - 10, 4.5, 0, Math.PI * 2);
+                ctx.arc(playerX + 8, playerY - 10, 4.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(playerX - 9.5, playerY - 11.5, 1.5, 0, Math.PI * 2);
+                ctx.arc(playerX + 6.5, playerY - 11.5, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Rosy Cheeks
+            ctx.fillStyle = 'rgba(244, 63, 94, 0.4)';
+            ctx.beginPath();
+            ctx.arc(playerX - 14, playerY - 4, 5, 0, Math.PI * 2);
+            ctx.arc(playerX + 14, playerY - 4, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Mouth
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(playerX, playerY - 5, 4, 0, Math.PI);
+            ctx.stroke();
+
+            // Chest Badge
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(playerPolarity, playerX, playerY + 24);
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            stopBGM();
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem('chibi_best', bestScore);
+            }
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('best-score').innerText = bestScore;
+            document.getElementById('gameover-modal').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            document.getElementById('gameover-modal').classList.add('hidden');
+            document.getElementById('start-overlay').classList.remove('hidden');
+        }
+
+        window.onload = () => {
+            resizeCanvas();
+            requestAnimationFrame(gameLoop);
+        };
+    </script>
+</body>
+</html>
