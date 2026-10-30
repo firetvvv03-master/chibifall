@@ -974,7 +974,7 @@
 
         let spawnTimer = 0;
         let spawnInterval = 75;
-        let gameSpeed = 2.5;
+        let gameSpeed = 0.1;
 
         let screenShakeTime = 0;
         let comboCount = 0;
@@ -1051,7 +1051,7 @@
             floatingTexts = [];
 
             spawnTimer = 0;
-            gameSpeed = 2.5;
+            gameSpeed = 1.5;
             spawnInterval = 75;
             playerPolarity = 'N';
             playerX = width / 2;
@@ -1288,7 +1288,7 @@
             const polarity = Math.random() < 0.5 ? 'N' : 'S';
             const shapes = ['star', 'heart', 'diamond', 'bubble'];
             const shape = shapes[Math.floor(Math.random() * shapes.length)];
-            const size = 38;
+            const size = 52;
             const x = Math.random() * (width - size - 60) + 30;
             const currentSpeed = activeSlow ? (gameSpeed * 0.5) : gameSpeed;
 
@@ -1340,7 +1340,7 @@
                 spawnItem();
                 spawnTimer = 0;
                 if (spawnInterval > 28) spawnInterval -= 1;
-                if (gameSpeed < 5.2) gameSpeed += 0.04;
+                if (gameSpeed < 2.2) gameSpeed += 0.02;
             }
 
             if (isFeverActive) {
